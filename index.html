@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
+    <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#000000">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kamhanga Advanced Group 2024/2025</title>
@@ -2876,16 +2878,34 @@ document.getElementById('commentForm').addEventListener('submit', e => {
 });
 
 document.getElementById('emergencyForm').addEventListener('submit', e => {
+
     e.preventDefault();
+
     const data = {
+
         memberPhone: document.getElementById('emergencyMember').value,
+
         amount: document.getElementById('emergencyAmount').value,
+
         purpose: document.getElementById('emergencyPurpose').value,
+
         timestamp: Date.now()
+
     };
+
     saveEmergencyContribution(data);
 });
     </script>
+    
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => console.log('Service Worker registered'))
+        .catch(error => console.log('Service Worker registration failed:', error));
+    });
+  }
+</script>
+
 </body>
 </html>
-
