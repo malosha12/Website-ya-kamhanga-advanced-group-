@@ -1,0 +1,2891 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kamhanga Advanced Group 2024/2025</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #f39c12;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --announcement-regular: #3498db;
+            --announcement-emergency: #e74c3c;
+            --announcement-constitution: #2ecc71;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .loading-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .loading-circle {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 12px solid transparent;
+            border-top-color: var(--primary);
+            border-right-color: var(--secondary);
+            border-bottom-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 15px;
+            display: none;
+            margin: 0 auto;
+        }
+
+        .header {
+            position: relative;
+            background: linear-gradient(45deg, #1e90ff, #ff00cc);
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.2)" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,133.3C672,117,768,139,864,149.3C960,160,1056,160,1152,149.3C1248,139,1344,117,1392,106.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            animation: moveClouds 20s infinite linear;
+        }
+
+        @keyframes moveClouds {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome {
+            font-size: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .status-btn, .month-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-menu {
+            margin-bottom: 20px;
+        }
+
+        .nav-menu ul {
+            list-style: none;
+            background: var(--dark);
+            border-radius: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 10px;
+        }
+
+        .nav-menu li {
+            padding: 15px 20px;
+            color: var(--light);
+            cursor: pointer;
+            transition: background 0.3s;
+            flex: 1 1 100%;
+        }
+
+        .nav-menu li:hover {
+            background: var(--primary);
+        }
+
+        .nav-menu li.active {
+            background: var(--primary);
+        }
+
+        .nav-menu .icon {
+            margin-right: 10px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f1f1f1;
+            color: #333;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background: #e8f0fe;
+            box-shadow: 0 0 5px var(--primary);
+        }
+
+        .modern-select {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: var(--shadow);
+            appearance: none;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgNEw4IDhMNCwxMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            cursor: pointer;
+        }
+
+        .modern-select option {
+            background: #fff;
+            color: #333;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-content.success {
+            border-top: 5px solid var(--secondary);
+        }
+
+        .modal-content.error {
+            border-top: 5px solid var(--danger);
+        }
+
+        .modal-content.info {
+            border-top: 5px solid var(--primary);
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .announcement {
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .announcement.regular {
+            background: var(--announcement-regular);
+            animation: bounce 2s infinite;
+        }
+
+        .announcement.emergency {
+            background: var(--announcement-emergency);
+            animation: pulse 2s infinite;
+        }
+
+        .announcement.constitution {
+            background: var(--announcement-constitution);
+            animation: slide 2s ease-in-out;
+        }
+
+        .announcement::before {
+            position: absolute;
+            font-size: 30px;
+            top: 15px;
+            left: 15px;
+        }
+
+        .announcement.regular::before {
+            content: '📢';
+        }
+
+        .announcement.emergency::before {
+            content: '🚨';
+        }
+
+        .announcement.constitution::before {
+            content: '📜';
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(0); }
+        }
+
+        .announcement-text {
+            margin-left: 50px;
+            font-size: 16px;
+        }
+
+        .balance-display {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--dark);
+            color: var(--light);
+            border-radius: 10px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .powered-by {
+            display: inline-block;
+            animation: colorChange 6s infinite;
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes colorChange {
+            0% { color: #3498db; }
+            33% { color: #2ecc71; }
+            66% { color: #9b59b6; }
+            100% { color: #3498db; }
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .table th {
+            background: var(--primary);
+            color: white;
+        }
+
+        .constitution-content {
+            line-height: 1.8;
+            padding: 15px;
+        }
+
+        .constitution-content h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .constitution-content h2 {
+            font-size: 20px;
+            color: var(--primary);
+            margin: 20px 0 10px;
+        }
+
+        .constitution-content h3 {
+            font-size: 18px;
+            margin: 15px 0 10px;
+        }
+
+        .constitution-content p, .constitution-content li {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .constitution-content ul, .constitution-content ol {
+            margin-left: 20px;
+        }
+
+        .leader-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .leader-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .leader-icon {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .leader-name {
+            font-weight: bold;
+        }
+
+        .leader-position {
+            font-style: italic;
+            color: #f1c40f;
+        }
+
+        .emergency-form input,
+        .emergency-form select {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background: #f1f1f1;
+            color: #333;
+        }
+
+        .emergency-form input:focus,
+        .emergency-form select:focus {
+            outline: none;
+            background: #e8f0fe;
+            box-shadow: 0 0 5px var(--primary);
+        }
+
+        .emergency-history {
+            margin-top: 20px;
+        }
+
+        .emergency-history h4 {
+            background: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .emergency-history ul {
+            list-style: none;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .emergency-history li {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        @media (min-width: 768px) {
+            .container { max-width: 1200px; }
+            .nav-menu li { flex: 1 1 auto; }
+            .form-group input, .form-group select, .modern-select, .form-group textarea { max-width: 500px; }
+            .constitution-content { max-width: 800px; margin: 0 auto; }
+            .constitution-content h1 { font-size: 28px; }
+            .constitution-content h2 { font-size: 22px; }
+            .constitution-content h3 { font-size: 20px; }
+        }
+
+        @media (max-width: 767px) {
+            .nav-menu ul { flex-direction: column; }
+            .header h1 { font-size: 22px; }
+            .btn { width: 100%; }
+            .constitution-content h1 { font-size: 20px; }
+            .constitution-content h2 { font-size: 18px; }
+            .constitution-content h3 { font-size: 16px; }
+            .constitution-content p, .constitution-content li { font-size: 14px; }
+            .leader-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            .leader-icon {
+                margin-bottom: 10px;
+            }
+            .announcement-text {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingScreen">
+        <div class="loading-container">
+            <img src="https://media-hosting.imagekit.io/b870d0e2fb82429a/20250422_141507_0000.png?Expires=1840034234&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=LVpJ1rkA2xxCQCZ8dIBdHukuIXMHiFQBZWEbX~LToEycywfOyxx1wwl0fRaYk~NVFMnPOpKzVwbqDV5j6~ejlOpGTN5NKbC54KdmVKlGaqLB2DHBqN-IuWcHFxqusrtwvnwkeCnp2BhSL5Jh6dvUNuAMLIPywfX2hJvW1h9tS4FMA3sWIXruznTwCp2pBNs-pCX~TXkGrJaOXgRijAl0yQDITpHrsrIJDDM16URXO9BZdoWyxGFnbiT69cUzJZHRt32x6nwDydTNd2iA~ufx3iN78bCKtlXrlYvE2kISt4gd6Pt7zhVgPXhlQdp9ysySBQDoCA7e1rkMHoeGyr9BCg__" class="loading-image" alt="Loading">
+            <div class="loading-circle"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>KAMHANGA ADVANCED GROUP 2014-2018</h1>
+            <div class="welcome">Karibu Sana! Pamoja Tunaweza Zaidi.</div>
+            <div><span class="status-btn">Online</span> <span class="month-btn">Sasa tupo April</span></div>
+        </div>
+
+        <div id="announcementDisplay" class="announcement">
+            <div class="announcement-text" id="announcementText"></div>
+        </div>
+
+        <div id="balanceDisplay" class="balance-display" style="display: none;">
+            Salio la Mfumo: TSh <span id="balanceAmount">0</span>
+        </div>
+
+        <div class="nav-menu">
+            <ul>
+                <li class="active" onclick="openTab('home')"><span class="icon">🏠</span>NYUMBANI</li>
+                <li onclick="openTab('register')"><span class="icon">👤</span>Usajiri wa wanachama wapya</li>
+                <li onclick="openTab('payment')"><span class="icon">💰</span>Fanya Malipo yote hapa</li>
+                <li onclick="openTab('debtors')"><span class="icon">📉</span>Hali ya Malipo ya ada</li>
+                <li onclick="openTab('contributions')"><span class="icon">🤝</span>hali ya Michango yote</li>
+                <li id="nonContributorsTab" onclick="openTab('nonContributors')"><span class="icon">🚫</span>Wasiotoa michango kabisa</li>
+                <li onclick="openTab('finance')"><span class="icon">📊</span>Mapato na Matumizi</li>
+                <li onclick="openTab('personal')"><span class="icon">🧑</span>Taarifa Binafsi za kila mwanachama</li>
+                <li onclick="openTab('constitution')"><span class="icon">📚</span>KATIBA NA SHERIA ZA KUNDI</li>
+                <li onclick="openTab('membersListAlpha')"><span class="icon">📋</span>Majina ya wanachama wote</li>
+                <li onclick="openTab('print')"><span class="icon">🖨️</span>Chapisha</li>
+                <li onclick="openTab('comments')"><span class="icon">💬</span>Maoni</li>
+                <li onclick="openTab('leaders')"><span class="icon">👑</span>Majina ya Viongozi</li>
+                <li onclick="openTab('emergency')"><span class="icon">🚨</span>MICHANGO YA DHARURA 🚨</li>
+                <li id="secretaryTab" onclick="openTab('secretary')"><span class="icon">📆</span>Kumbukumbu za vikao</li>
+                <li onclick="openTab('admin')"><span class="icon">🔒</span>matumizi ya viongozi tu</li>
+            </ul>
+        </div>
+
+        <div id="home" class="tab-content" style="display: block;">
+            <div class="card">
+                <h2>Karibu!</h2>
+                <p>Karibu kwenye Mfumo Imara wa Usajili na Ufuatiliaji wa Malipo wa Kamhanga Advanced Group suluhisho mahususi kwa kikundi chetu, kikiwa na uwazi, ufanisi, na usalama wa hali ya juu katika usimamizi wa michango na ada!</p>
+                       </div>
+        </div>
+
+        <div id="register" class="tab-content">
+            <div class="card">
+                <h2>Usajili</h2>
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label>Jina Kamili</label>
+                        <input type="text" id="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Namba ya Simu</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mtaa</label>
+                        <input type="text" id="address" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Jisajili</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="payment" class="tab-content">
+            <div class="card">
+                <h2>Fanya Malipo</h2>
+                <form id="paymentForm">
+                    <div class="form-group">
+                        <label>Chagua Jina</label>
+                        <select id="paymentMember" required>
+                            <option value="">Chagua Mwanachama</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Aina ya Malipo</label>
+                        <select id="paymentType" onchange="togglePaymentFields()" required>
+                            <option value="">Chagua</option>
+                            <option value="Ada">Ada</option>
+                            <option value="Hela ya Kiingilio">Hela ya Kiingilio</option>
+                            <option value="Maafa na Starehe">Maafa na Starehe</option>
+                            <option value="Tuinuane">Tuinuane</option>
+                            <option value="Kurudisha Mkopo">Kurudisha Mkopo</option>
+                            <option value="Michango Mingine">Michango Mingine</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="feeMonthField" style="display: none;">
+                        <label>Ada ya Mwezi</label>
+                        <select id="feeMonth">
+                            <option value="January">Januari</option>
+                            <option value="February">Februari</option>
+                            <option value="March">Machi</option>
+                            <option value="April">Aprili</option>
+                            <option value="May">Mei</option>
+                            <option value="June">Juni</option>
+                            <option value="July">Julai</option>
+                            <option value="August">Agosti</option>
+                            <option value="September">Septemba</option>
+                            <option value="October">Oktoba</option>
+                            <option value="November">Novemba</option>
+                            <option value="December">Disemba</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="dateField" style="display: none;">
+                        <label>Tarehe</label>
+                        <input type="date" id="paymentDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Kiasi (TSh)</label>
+                        <input type="number" id="paymentAmount" min="1" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Tuma</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="debtors" class="tab-content">
+            <div class="card">
+                <h2>Hali ya Malipo</h2>
+                <div class="form-group">
+                    <select id="debtMonth" class="modern-select" onchange="loadDebtors()">
+                        <option value="">Chagua Mwezi</option>
+                        <option value="January">Januari</option>
+                        <option value="February">Februari</option>
+                        <option value="March">Machi</option>
+                        <option value="April">Aprili</option>
+                    </select>
+                </div>
+                <div id="debtorsList"></div>
+            </div>
+        </div>
+
+        <div id="contributions" class="tab-content">
+            <div class="card">
+                <h2>Michango</h2>
+                <div class="form-group">
+                    <select id="contributionType" class="modern-select" onchange="loadContributions()">
+                        <option value="">Chagua Aina</option>
+                        <option value="Ada">Ada</option>
+                        <option value="Hela ya Kiingilio">Hela ya Kiingilio</option>
+                        <option value="Maafa na Starehe">Maafa na Starehe</option>
+                        <option value="Tuinuane">Tuinuane</option>
+                        <option value="Kurudisha Mkopo">Kurudisha Mkopo</option>
+                        <option value="Michango Mingine">Michango Mingine</option>
+                    </select>
+                </div>
+                <div id="contributionsList"></div>
+            </div>
+        </div>
+
+        <div id="nonContributors" class="tab-content">
+            <div class="card">
+                <h2>Wanachama Wasiotoa Michango</h2>
+                <div id="nonContributorsList"></div>
+            </div>
+        </div>
+
+        <div id="finance" class="tab-content">
+            <div class="card">
+                <h2>Mapato/Matumizi</h2>
+                <div class="form-group">
+                    <label>Andika Mapato</label>
+                    <input type="number" id="incomeAmount" placeholder="Kiasi (TSh)">
+                    <input type="text" id="incomeDesc" placeholder="Maelezo ya Mapato">
+                    <button class="btn btn-primary" onclick="addIncome()">Ongeza</button>
+                </div>
+                <div class="form-group">
+                    <label>Andika Matumizi</label>
+                    <input type="number" id="expenseAmount" placeholder="Kiasi (TSh)">
+                    <input type="text" id="expenseDesc" placeholder="Maelezo ya Matumizi">
+                    <button class="btn btn-danger" onclick="addExpense()">Ongeza</button>
+                </div>
+                <div id="financeSummary"></div>
+                <div id="financeHistory"></div>
+                <button class="btn btn-primary" onclick="generateFinanceReport('week')">Ripoti ya Wiki (PDF)</button>
+                <button class="btn btn-primary" onclick="generateFinanceReport('month')">Ripoti ya Mwezi (PDF)</button>
+                <button class="btn btn-primary" onclick="generateFinanceReport('year')">Ripoti ya Mwaka (PDF)</button>
+            </div>
+        </div>
+
+        <div id="personal" class="tab-content">
+            <div class="card">
+                <h2>Taarifa Binafsi</h2>
+                <div class="form-group">
+                    <select id="personalMember" class="modern-select" onchange="loadPersonalReport()">
+                        <option value="">Chagua Mwanachama</option>
+                    </select>
+                </div>
+                <div id="personalReport"></div>
+            </div>
+        </div>
+
+        <div id="constitution" class="tab-content">
+            <div class="card">
+                <h2>First Proposed Constitution</h2>
+                              <div class="constitution-content">
+                    <h1>KATIBA YA GROUP LA KAMHANGA SECONDARY 2014-2018</h1>
+                    <h2>UTANGULIZI</h2>
+                    <p>Kundi hili limeanzishwa kwa lengo la kukuza umoja, mshikamano, na ushirikiano kati ya wanachama waliowahi kusoma Shule ya Sekondari Kamhanga. Katiba hii inalenga kuweka mwongozo wa shughuli za kundi, maadili, majukumu, na taratibu za utekelezaji ili kuhakikisha maendeleo ya pamoja,kumbuka kuwa katiba yetu inatakiwa kufatwa na wanachama wote pia na viongozi, hakuna mtu atakaye kuwa juu ya sheria au juu ya katiba yetu maamuzi yote yatafanywa kulingana na katiba inasema nini,mwisho katiba yetu itahifadhiwa kwenye mfumo wa KAMHANGA ONLINE GROUP na kwenye pdf ambayo itatumwa kila mara moja kwa wiki ili kila mtu asome na kupitia sheria zote za kundi,wote mnakaribishwa katika  kundi letu imara </p>
+                    
+                    <h2>SURA YA KWANZA: KANUNI ZA MSINGI</h2>
+                    <h3>Ibara ya 1: Jina na Lengo la Kundi</h3>
+                    <ol>
+                        <li>Jina la kundi litakuwa KAMHANGA ADVANCED GROUP.</li>
+                        <li>Malengo ya kundi ni:
+                            <ul>
+                                <li>Kudumisha umoja na mshikamano kati ya wanachama.</li>
+                                <li>Kuhimiza upendo na ushirikiano katika shida na raha.</li>
+                                <li>Kuwezesha maendeleo ya pamoja kupitia miradi na michango.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h3>Ibara ya 2: Sifa za Mwanachama</h3>
+                    <ol>
+                        <li>Mwanachama ni yule ambaye:
+                            <ul>
+                                <li>Amewahi kusoma Shule ya Sekondari Kamhanga.</li>
+                                <li>Ana umri wa kuanzia miaka 18 na kuendelea.</li>
+                                <li>Amejitambulisha kwa majina mawili na picha moja kwa wanachama wengine.</li>
+                                <li>Amekubali kushiriki kikamilifu katika shughuli za kundi na kufuata katiba hii.</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h2>SURA YA PILI: MAJUKUMU NA MAADILI</h2>
+                    <h3>Ibara ya 3: Majukumu ya Mwanachama</h3>
+                    <ol>
+                        <li>Mwanachama atalazimika:
+                            <ul>
+                                <li>Kushiriki kikamilifu katika mijadala, vikao, na shughuli za kundi.</li>
+                                <li>Kutoa mchango wa wiki (TSh 500) au mwezi (TSh 1,000) kulingana na makubaliano ya kundi.</li>
+                                <li>Kuhudhuria vikao vya kundi angalau mara moja kwa wiki au kila baada ya miezi 3 kulingana na ratiba rasmi.</li>
+                                <li>Kutoa taarifa mapema ikiwa hataweza kushiriki au kuhudhuria vikao.</li>
+                            </ul>
+                        </li>
+                        <li>Mwanachama atawajibika kushiriki michango ya shida (msiba, ugonjwa) na raha (harusi, send-off) kulingana na taratibu za kundi.</li>
+                    </ol>
+
+                    <h3>Ibara ya 4: Maadili ya Kundi</h3>
+                    <ol>
+                        <li>Wanachama watalazimika kuheshimu maadili yafuatayo:
+                            <ul>
+                                <li>Kuheshimiana na kuepuka matusi, kejeli, au lugha chafu.</li>
+                                <li>Kukataza majungu, fitina, unafiki, na husuda.</li>
+                                <li>Kukataza picha, video, au audio za utupu au zenye uchochezi.</li>
+                            </ul>
+                        </li>
+                        <li>Mwanachama yeyote atakayekiuka maadili haya atachukuliwa hatua za kinidhamu kulingana na ibara ya adhabu.</li>
+                    </ol>
+
+                    <h2>SURA YA TATU: MFUKO WA KUNDI</h2>
+                    <h3>Ibara ya 5: Michango ya Kundi</h3>
+                    <ol>
+                        <li>Kiingilio: Kila mwanachama mpya atalipa TSh 10,000 kama ada ya kujiunga.</li>
+                        <li>Michango ya ada:
+                            <ul>
+                                <li>Mchango wa wiki: TSh 500 kwa kila mwanachama.</li>
+                                <li>Mchango wa mwezi: TSh 2,000 kwa kila mwanachama (kama ada ya mwezi mzima lakini kama utatoa 500 kila wiki, ada ya mwezi 2,000 hutadaiwa).</li>
+                                <li>Mchango wa Shughuli za Msiba au Furaha: TSh 3,000 kwa kila tukio, kulipwa ndani ya siku 10.</li>
+                            </ul>
+                        </li>
+                        <li>Michango yote itawekwa kwenye akaunti rasmi ya kundi:
+                            <ul>
+                                <li>Benki: CRDB</li>
+                                <li>Namba ya Akaunti: 01520007NBV00</li>
+                                <li>Jina: Faraja Herman</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h3>Ibara ya 6: Matumizi ya Mfuko</h3>
+                    <ol>
+                        <li>Mfuko utatumika kwa:
+                            <ul>
+                                <li>Kusaidiana katika misiba, harusi, ugonjwa, na sherehe za wanachama.</li>
+                                <li>Kuwezesha miradi ya pamoja kwa maendeleo ya kundi.</li>
+                                <li>Kuweka akiba kwa ajili ya mahitaji ya dharura au ya muda mrefu.</li>
+                            </ul>
+                        </li>
+                        <li>Mwanachama ambaye hajatoa mchango wowote au ana deni la mchango hatahitajika kusaidiwa na kundi katika shida yake.</li>
+                    </ol>
+
+                    <h3>Ibara ya 7: Haki za Mchango</h3>
+                    <ol>
+                        <li>Mwanachama mpya atakuwa halali kupokea mchango wa msiba mara moja baada ya kulipa kiingilio na kushiriki michango ya msingi.</li>
+                        <li>Mchango wa furaha (harusi, send-off) utatolewa kwa mwanachama baada ya kuwa mwanachama kwa angalau miezi 4 na kushiriki michango yote.</li>
+                        <li>Mchango utahusu:
+                            <ul>
+                                <li>Mwanachama mwenyewe.</li>
+                                <li>Baba/Mama.</li>
+                                <li>Mke/Mume.</li>
+                                <li>Watoto.</li>
+                                <li>Matukio ya harusi au send-off.</li>
+                                <li>Ugonjwa unaohitaji msaada wa kundi.</li>
+                            </ul>
+                        </li>
+                        <li>Wanachama wa familia moja watapokea mchango sawa na mwanachama mwingine yeyote.</li>
+                    </ol>
+
+                    <h2>SURA YA NNE: UONGOZI NA UCHAGUZI</h2>
+                    <h3>Ibara ya 8: Muundo wa Uongozi</h3>
+                    <ol>
+                        <li>Kundi litakuwa na viongozi wafuatao:
+                            <ul>
+                                <li>Mwenyekiti</li>
+                                <li>Katibu</li>
+                                <li>Mhazini</li>
+                            </ul>
+                        </li>
+                        <li>Viongozi watachaguliwa kila baada ya mwaka mmoja kupitia uchaguzi huru na wa haki.</li>
+                        <li>Kila mwanachama ana haki ya kugombea nafasi yoyote ya uongozi bila kujali jinsia.</li>
+                        <li>Viongozi watachaguliwa kwa kuzingatia:
+                            <ul>
+                                <li>Uaminifu na uadilifu.</li>
+                                <li>Uwezo wa kusimamia shughuli za kundi.</li>
+                                <li>Maoni ya wanachama wengi.</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h3>Ibara ya 9: Majukumu ya Uongozi</h3>
+                    <ol>
+                        <li><strong>Mwenyekiti:</strong>
+                            <ol>
+                                <li>Kuongoza vikao vya kikundi kwa ufanisi.</li>
+                                <li>Kusimamia utekelezaji wa maamuzi ya vikao.</li>
+                                <li>Kuwakilisha kundi kwenye shughuli za nje.</li>
+                                <li>Kuhakikisha mshikamano, nidhamu na amani ndani ya kundi.</li>
+                                <li>Kuweka mwelekeo na dira ya maendeleo ya kundi.</li>
+                                <li>Kutoa uamuzi wa mwisho pale panapohitajika.</li>
+                                <li>Kuhamasisha ushiriki wa wanachama katika shughuli.</li>
+                                <li>Kusimamia utendaji wa viongozi wengine.</li>
+                                <li>Kushughulikia migogoro kwa hekima.</li>
+                                <li>Kuwa msemaji rasmi wa kundi.</li>
+                            </ol>
+                        </li>
+                        <li><strong>Katibu:</strong>
+                            <ol>
+                                <li>Kuandika na kutunza kumbukumbu za vikao.</li>
+                                <li>Kuandaa ajenda na ratiba ya mikutano.</li>
+                                <li>Kutunza nyaraka muhimu za kundi.</li>
+                                <li>Kusambaza taarifa kwa wanachama.</li>
+                                <li>Kuhifadhi orodha na taarifa za wanachama.</li>
+                                <li>Kukumbusha wanachama kuhusu michango/vikao.</li>
+                                <li>Kusimamia usajili wa wanachama wapya.</li>
+                                <li>Kuandaa ripoti ya maendeleo ya kundi.</li>
+                                <li>Kuandaa barua rasmi na nyaraka za mawasiliano.</li>
+                                <li>Kuratibu taarifa za mwaka kwa viongozi na wanachama.</li>
+                            </ol>
+                        </li>
+                        <li><strong>Mhazini:</strong>
+                            <ol>
+                                <li>Kukusanya michango yote ya wanachama.</li>
+                                <li>Kutunza fedha za kikundi kwa usalama.</li>
+                                <li>Kutoa fedha kwa matumizi kwa idhini rasmi.</li>
+                                <li>Kutunza kumbukumbu za mapato na matumizi.</li>
+                                <li>Kuandaa taarifa za kifedha kwa vikao.</li>
+                                <li>Kuweka taarifa binafsi za michango kwa kila mwanachama.</li>
+                                <li>Kuandaa na kuwasilisha bajeti ya matumizi ya kikundi.</li>
+                                <li>Kuhifadhi vocha, risiti na ushahidi wa manunuzi.</li>
+                                <li>Kusimamia mali za kikundi zinazohusiana na fedha.</li>
+                                <li>Kutoa ripoti ya kifedha ya mwaka mzima.</li>
+                            </ol>
+                        </li>
+                    </ol>
+                    <h3>Ibara ya 11: Shughuli za Pamoja</h3>
+                    <ol>
+                        <li>Kundi litapanga sherehe ya kila mwaka kwa ajili ya kukutana na kusherehekea mafanikio.</li>
+                        <li>Miradi ya pamoja itaanzishwa ili kuimarisha uwezo wa kifedha wa wanachama.</li>
+                    </ol>
+
+                    <h2>SURA YA SITA: ADHABU NA UTEKELEZAJI</h2>
+                    <h3>Ibara ya 12: Adhabu za Kinidhamu</h3>
+                    <ol>
+                        <li>Kushindwa Kutoa Mchango:
+                            <ul>
+                                <li>Faini ya TSh 1,000 kwa kushindwa kutoa mchango wa wiki/mwezi.</li>
+                                <li>Ikiendelea kwa wiki mbili/miezi miwili: Sasipensheni au kuondolewa kwenye kundi.</li>
+                            </ul>
+                        </li>
+                        <li>Kushindwa Kuhudhuria Vikao:
+                            <ul>
+                                <li>Faini ya TSh 500 kwa kila kikao kilichokosekana.</li>
+                                <li>Vikao viwili mfululizo: Faini ya TSh 1,000 pamoja na sasipensheni.</li>
+                            </ul>
+                        </li>
+                        <li>Kukiuka Maadili ya Kundi:
+                            <ul>
+                                <li>Faini ya TSh 2,000 kwa matumizi ya lugha mbaya, kashfa, au tabia zisizofaa.</li>
+                                <li>Kurudia mara kwa mara: Sasipensheni au kuondolewa kabisa.</li>
+                            </ul>
+                        </li>
+                        <li>Kupuuza Mawasiliano ya Kundi:
+                            <ul>
+                                <li>Faini ya TSh 1,000 kwa kushindwa kujibu ujumbe muhimu.</li>
+                                <li>Kurudia: Sasipensheni au kuondolewa.</li>
+                            </ul>
+                        </li>
+                        <li>Mwanachama aliyeondolewa au kujiondoa hatatarajiwa kurudishiwa michango yoyote.</li>
+                    </ol>
+
+                    <h3>Ibara ya 13: Ushirikiano Katika Shida</h3>
+                    <ol>
+                        <li>Mwanachama anayehitaji msaada wa kundi atawajibika kufuata taratibu za uongozi.</li>
+                        <li>Mwanachama asiyeshiriki michango yoyote hatahitajika kusaidiwa na kundi.</li>
+                    </ol>
+
+                    <h2>SURA YA SABA: MABADILIKO YA KATIBA</h2>
+                      <h3>Ibara ya 14: Utaratibu wa Marekebisho</h3>
+                    <ol>
+                        <li>Katiba hii inaweza kurekebishwa kulingana na maoni ya wanachama wote.</li>
+                        <li>Mapendekezo ya marekebisho yatapitiwa na kupitishwa katika kikao rasmi cha kundi.</li>
+                        <li>Marekebisho yoyote yatatangazwa rasmi kwa wanachama wote.</li>
+                    </ol>
+
+                    <p><strong>Imetolewa na:</strong> FARAJA HERMAN<br>
+                    <strong>Tarehe:</strong> 13 Aprili 2025</p>
+                </div>
+            </div>
+        </div>
+
+ 
+
+        <div id="membersListAlpha" class="tab-content">
+            <div class="card">
+                <h2>Wanachama</h2>
+                <div id="membersListAlphabet"></div>
+            </div>
+        </div>
+
+        <div id="print" class="tab-content">
+            <div class="card">
+                <h2>Chapisha Taarifa</h2>
+                <div class="form-group">
+                    <label>Chagua Jina</label>
+                    <select id="printPersonalMember" class="modern-select">
+                        <option value="">Chagua Mwanachama</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="printPersonalReport()">Chapisha Taarifa Binafsi</button>
+                <button class="btn btn-primary" onclick="printDebtors()">Chapisha Hali ya Malipo</button>
+                <button class="btn btn-primary" onclick="printContributions()">Chapisha Michango</button>
+                <button class="btn btn-primary" onclick="printFinance()">Chapisha Mapato/Matumizi</button>
+                <button class="btn btn-primary" onclick="printNonContributors()">Chapisha Wasiotoa Michango</button>
+            </div>
+        </div>
+
+        <div id="comments" class="tab-content">
+            <div class="card">
+                <h2>Maoni</h2>
+                <form id="commentForm">
+                    <div class="form-group">
+                        <label>Jina Lako</label>
+                        <input type="text" id="commentName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Maoni Yako</label>
+                        <input type="text" id="commentText" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Tuma Maoni</button>
+                </form>
+                <div id="commentsList"></div>
+            </div>
+        </div>
+
+        <div id="leaders" class="tab-content">
+            <div class="card">
+                <h2>Viongozi</h2>
+                <div id="leadersList"></div>
+            </div>
+        </div>
+
+        <div id="emergency" class="tab-content">
+            <div class="card">
+                <h2>Michango ya Dharura</h2>
+                <div id="emergencyFormSection">
+                    <form id="emergencyForm" class="emergency-form">
+                        <div class="form-group">
+                            <label>Jina la Mwanachama</label>
+                            <select id="emergencyMember" required>
+                                <option value="">Chagua Mwanachama</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Kiasi (TSh)</label>
+                            <input type="number" id="emergencyAmount" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Maelezo (Pesa ya Nini)</label>
+                            <input type="text" id="emergencyPurpose" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Tuma Mchango</button>
+                    </form>
+                </div>
+                <div id="emergencyHistory" class="emergency-history"></div>
+            </div>
+        </div>
+
+        <div id="secretary" class="tab-content">
+            <div class="card">
+                <h2>Katibu</h2>
+                <div class="form-group">
+                    <h3>Kumbukumbu za Kikao</h3>
+                    <textarea id="meetingMinutes" rows="5" placeholder="Andika kumbukumbu za kikao"></textarea>
+                    <button class="btn btn-primary" onclick="saveMeetingMinutes()">Hifadhi</button>
+                </div>
+                <div id="meetingMinutesList"></div>
+                <div class="form-group">
+                    <h3>Hudhurio la Kikao</h3>
+                    <select id="attendanceMember" class="modern-select" multiple>
+                        <option value="">Chagua Wanachama</option>
+                    </select>
+                    <input type="date" id="attendanceDate" required>
+                    <button class="btn btn-primary" onclick="saveAttendance()">Hifadhi Hudhurio</button>
+                </div>
+                <div id="attendanceList"></div>
+                <div class="form-group">
+                    <h3>Majukumu ya Wanachama</h3>
+                    <select id="actionItemMember" class="modern-select">
+                        <option value="">Chagua Mwanachama</option>
+                    </select>
+                    <input type="text" id="actionItemDesc" placeholder="Maelezo ya Jukumu">
+                    <input type="date" id="actionItemDeadline" placeholder="Tarehe ya Mwisho">
+                    <button class="btn btn-primary" onclick="assignActionItem()">Weka Jukumu</button>
+                </div>
+                <div id="actionItemsList"></div>
+                <div class="form-group">
+                    <h3>Badilisha Hali ya Mwanachama</h3>
+                    <select id="statusMember" class="modern-select">
+                        <option value="">Chagua Mwanachama</option>
+                    </select>
+                    <select id="memberStatus">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="suspended">Suspended</option>
+                    </select>
+                    <input type="text" id="statusNotes" placeholder="Maelezo ya Hali">
+                    <button class="btn btn-primary" onclick="updateMemberStatus()">Hifadhi Hali</button>
+                </div>
+                <div id="statusList"></div>
+                <div class="form-group">
+                    <h3>Ratiba ya Matukio</h3>
+                    <input type="text" id="eventName" placeholder="Jina la Tukio">
+                    <input type="datetime-local" id="eventDate" placeholder="Tarehe na Saa">
+                    <input type="text" id="eventLocation" placeholder="Mahali">
+                    <button class="btn btn-primary" onclick="scheduleEvent()">Hifadhi Tukio</button>
+                </div>
+                <div id="eventsList"></div>
+                <div class="form-group">
+                    <h3>Hifadhi Hati</h3>
+                    <input type="text" id="documentName" placeholder="Jina la Hati">
+                    <input type="file" id="documentFile" accept=".pdf,.doc,.docx">
+                    <button class="btn btn-primary" onclick="uploadDocument()">Hifadhi Hati</button>
+                </div>
+                <div id="documentsList"></div>
+                <div class="form-group">
+                    <h3>Dashboard ya Katibu</h3>
+                    <div id="secretaryDashboard"></div>
+                </div>
+                <div class="form-group">
+                    <h3>Taarifa za Wanachama</h3>
+                    <select id="secretaryMember" class="modern-select" onchange="loadSecretaryMemberDetails()">
+                        <option value="">Chagua Mwanachama</option>
+                    </select>
+                    <div id="secretaryMemberDetails"></div>
+                </div>
+                <div class="form-group">
+                    <label>Ripoti ya Kikao</label>
+                    <button class="btn btn-primary" onclick="generateMeetingReport()">Chapisha Ripoti (PDF)</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="admin" class="tab-content">
+            <div class="card">
+                <h2>VIONGOZI PANEL</h2>
+                <div id="adminLoginForm">
+                    <div class="form-group">
+                        <label>Neno la Siri</label>
+                        <input type="password" id="adminPassword">
+                    </div>
+                    <button class="btn btn-primary" onclick="loginAdmin()">Ingia</button>
+                </div>
+                <div id="adminPanel" style="display: none;">
+                    <button class="btn btn-danger" onclick="logoutAdmin()">Toka</button>
+                    <div id="pendingPayments">
+                        <h3>Uthibitisho wa Malipo</h3>
+                        <div id="pendingPaymentsTable"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Tangazo</label>
+                        <input type="text" id="announcementTextInput">
+                        <button class="btn btn-primary" onclick="postAnnouncement()">Chapisha Tangazo</button>
+                    </div>
+                    <div id="announcementsList"></div>
+                    <div class="form-group">
+                        <label>Jina la Kiongozi</label>
+                        <input type="text" id="leaderName">
+                    </div>
+                    <div class="form-group">
+                        <label>Cheo</label>
+                        <input type="text" id="leaderPosition">
+                    </div>
+                    <button class="btn btn-primary" onclick="addLeader()">Ongeza Kiongozi</button>
+                    <div class="form-group">
+                        <label>Ficha/Onyesha Wasiotoa Michango</label>
+                                      <button class="btn btn-primary" onclick="toggleNonContributors()">Ficha/Onyesha</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Ficha/Onyesha Form ya Michango ya Dharura</label>
+                        <button class="btn btn-primary" onclick="toggleEmergencyForm()">Ficha/Onyesha</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Ficha/Onyesha Kipengele cha Katibu</label>
+                        <button class="btn btn-primary" onclick="toggleSecretaryTab()">Ficha/Onyesha</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Onyesha/Ficha Salio la Mfumo</label>
+                        <button class="btn btn-primary" onclick="toggleBalanceDisplay()">Ficha/Onyesha</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Jina la Mchango wa Dharura</label>
+                        <input type="text" id="emergencyName">
+                    </div>
+                    <div class="form-group">
+                        <label>Tarehe ya Kuanza</label>
+                        <input type="datetime-local" id="emergencyStart">
+                    </div>
+                    <div class="form-group">
+                        <label>Tarehe ya Mwisho</label>
+                        <input type="datetime-local" id="emergencyDeadline">
+                    </div>
+                    <button class="btn btn-primary" onclick="setEmergencyDeadline()">Weka Muda</button>
+                    <button class="btn btn-primary" onclick="extendEmergencyDeadline()">Ongeza Muda</button>
+                    <button class="btn btn-danger" onclick="deleteEmergencyHistory()">Futa Historia ya Michango</button>
+                    <div class="form-group">
+                        <label>Badilisha Jina la Mtumiaji la Ingia</label>
+                        <input type="text" id="newLoginUsername" placeholder="Jina la Mtumiaji Jipya">
+                    </div>
+                    <div class="form-group">
+                        <label>Badilisha Neno la Siri la Ingia</label>
+                        <input type="password" id="newLoginPassword" placeholder="Neno la Siri Jipya">
+                    </div>
+                    <button class="btn btn-primary" onclick="changeLoginCredentials()">Badilisha Jina/Neno la Siri</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span class="powered-by">POWERED BY MALOSHA</span>
+            <div id="dailyUsers">Waliotembelea mfumo leo: <span id="userCount">0</span></div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <div class="modal-icon" id="modalIcon"></div>
+            <h2 id="modalTitle">Title</h2>
+            <p id="modalMessage">Message</p>
+            <button class="btn btn-primary" onclick="closeModal()">Sawa</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script type="text/javascript">
+        const { jsPDF } = window.jspdf;
+        const firebaseConfig = {
+            apiKey: "AIzaSyAweqJDGhTOUSfYPm8zQ-o2vRM9k2_ooiQ",
+            authDomain: "kamhanga-program.firebaseapp.com",
+            databaseURL: "https://kamhanga-program-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "kamhanga-program",
+            storageBucket: "kamhanga-program.firebasestorage.app",
+            messagingSenderId: "52295319869",
+            appId: "1:52295319869:web:9ccf9637ea0c3d6c4e0554",
+            measurementId: "G-4772P894WS"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const CONSTANT_PASSWORD = '1360';
+        let customAdminPassword = null;
+        const MONTHLY_FEE = 2000;
+        const ENTRY_FEE = 10000;
+        const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const CURRENT_MONTH_INDEX = 3; // April (0-based index)
+        const ANNOUNCEMENT_ROTATION_INTERVAL = 30000; // 30 seconds
+
+        let loginUsername = '1340';
+        let loginPassword = '1340';
+        let isAdminLoggedIn = false;
+        let adminSettings = {
+            isNonContributorsVisible: true,
+            isEmergencyFormVisible: true,
+            isSecretaryTabVisible: true,
+            isBalanceVisible: false
+        };
+        let shownArticles = [];
+
+        const constitutionArticles = [
+  "Jina la kundi litakuwa KAMHANGA ADVANCED GROUP.",
+  "Malengo ya kundi ni kudumisha umoja, mshikamano, upendo na ushirikiano katika shida na raha, pamoja na kuendeleza miradi na michango kwa maendeleo ya pamoja.",
+  "Mwanachama ni yule aliyesoma Shule ya Sekondari Kamhanga, mwenye umri kuanzia miaka 18, aliyetoa majina mawili na picha moja kwa wanachama, na aliyekubali kushiriki kikamilifu kwenye shughuli za kundi.",
+  "Mwanachama atalazimika kushiriki mijadala, vikao, na shughuli za kundi.",
+  "Mwanachama atatoa mchango wa wiki TSh 500 au mwezi TSh 2000 kulingana na makubaliano ya kundi.",
+  "Mwanachama lazima ahudhurie vikao angalau mara moja kwa wiki au kila baada ya miezi 3.",
+  "Mwanachama atatoa taarifa mapema iwapo hataweza kushiriki kikao.",
+  "Mwanachama atashiriki michango ya shida (msiba, ugonjwa) na raha (harusi, send-off).",
+  "Wanachama watatakiwa kuheshimiana, kuepuka matusi, kejeli, majungu, fitina, na kusambaza picha au video za utupu au uchochezi.",
+  "Mwanachama akikiuka maadili atachukuliwa hatua za kinidhamu.",
+  "Kiingilio kwa mwanachama mpya ni TSh 10,000.",
+  "Mchango wa mwezi ni TSh 2,000 au TSh 500 kila wiki.",
+  "Mchango wa msiba/furaha ni TSh 3,000 kulipwa ndani ya siku 10.",
+  "Michango itawekwa kwenye akaunti rasmi ya CRDB, namba 01520007NBV00, jina Faraja Herman.",
+  "Mfuko wa kundi utatumika kusaidia kwenye misiba, harusi, ugonjwa, miradi ya maendeleo, na akiba ya dharura.",
+  "Mwanachama asiyechangia hatahitajika kusaidiwa na kundi.",
+  "Mwanachama mpya atastahili msaada wa msiba baada ya kulipa kiingilio na kushiriki michango.",
+  "Mchango wa furaha utapatikana baada ya miezi 4 ya uanachama na kushiriki michango yote.",
+  "Mchango unahusu mwanachama mwenyewe, wazazi, mwenza, watoto, na matukio ya furaha au ugonjwa mkubwa.",
+  "Kila mwanachama ana haki sawa ya kupokea mchango.",
+  "Viongozi wa kundi ni Mwenyekiti, Katibu, na Mhazini.",
+  "Viongozi huchaguliwa kila mwaka kwa njia ya haki na huru.",
+  "Kila mwanachama ana haki ya kugombea uongozi bila kujali jinsia.",
+  "Mwenyekiti atasimamia vikao, maamuzi, mshikamano, amani, na kuwa msemaji rasmi wa kundi.",
+  "Katibu atatunza kumbukumbu, maandalizi ya vikao, nyaraka, orodha ya wanachama na taarifa za mawasiliano.",
+  "Mhazini atakusanya na kutunza fedha, kuandaa taarifa za kifedha na bajeti, na kuhifadhi ushahidi wa manunuzi.",
+  "Kundi litakuwa na sherehe ya kila mwaka kusherehekea mafanikio na kuanzisha miradi ya pamoja.",
+  "Faini ya kuchelewa au kutotoa mchango wa wiki/mwezi ni TSh 1,000; ikiendelea, adhabu ni kusimamishwa au kuondolewa.",
+  "Faini ya kutohudhuria kikao ni TSh 500; kwa vikao viwili mfululizo, TSh 1,000 pamoja na kusimamishwa.",
+  "Kukiuka maadili kunatozwa TSh 2,000, kurudia kunaweza kupelekea kusimamishwa au kufukuzwa.",
+  "Kupuuzia mawasiliano ya kundi hutozwa TSh 1,000; kurudia kunaweza pelekea hatua zaidi.",
+  "Aliyeondolewa au aliyejiondoa hatarudishiwa mchango wowote.",
+  "Mwanachama anahitaji msaada atawasiliana na uongozi kwa utaratibu rasmi.",
+  "Katiba inaweza kurekebishwa kwa maoni ya wanachama, na marekebisho kupitishwa kwenye kikao rasmi na kutangazwa kwa wote."
+];
+
+        function generateSessionId() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function getTodayKey() {
+            const today = new Date();
+            return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+        }
+
+        function updateUserCount() {
+            const sessionId = localStorage.getItem('sessionId') || generateSessionId();
+            localStorage.setItem('sessionId', sessionId);
+            const todayKey = getTodayKey();
+            const lastVisit = localStorage.getItem('lastVisit');
+            
+            if (lastVisit !== todayKey) {
+                database.ref('dailyUsers').child(todayKey).child(sessionId).set(true)
+                    .then(() => {
+                        localStorage.setItem('lastVisit', todayKey);
+                        database.ref('dailyUsers').child(todayKey).once('value')
+                            .then(snap => {
+                                const count = snap.numChildren() || 0;
+                                document.getElementById('userCount').textContent = count;
+                            });
+                    });
+            } else {
+                database.ref('dailyUsers').child(todayKey).once('value')
+                    .then(snap => {
+                        const count = snap.numChildren() || 0;
+                        document.getElementById('userCount').textContent = count;
+                    });
+            }
+        }
+
+        function loadAdminSettings() {
+            database.ref('adminSettings').once('value')
+                .then(snap => {
+                    const settings = snap.val() || {};
+                    adminSettings = {
+                        isNonContributorsVisible: settings.isNonContributorsVisible !== undefined ? settings.isNonContributorsVisible : true,
+                        isEmergencyFormVisible: settings.isEmergencyFormVisible !== undefined ? settings.isEmergencyFormVisible : true,
+                        isSecretaryTabVisible: settings.isSecretaryTabVisible !== undefined ? settings.isSecretaryTabVisible : true,
+                        isBalanceVisible: settings.isBalanceVisible !== undefined ? settings.isBalanceVisible : false
+                    };
+                    toggleNonContributorsDisplay();
+                    toggleEmergencyFormDisplay();
+                    toggleSecretaryTabDisplay();
+                    toggleBalanceDisplayUI();
+                })
+                .catch(err => console.error('Load Admin Settings Error:', err));
+        }
+
+        function saveAdminSettings() {
+            database.ref('adminSettings').set(adminSettings)
+                .catch(err => console.error('Save Admin Settings Error:', err));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.querySelector('.container').style.display = 'block';
+            }, 4000);
+            updateUserCount();
+            loadAdminSettings();
+            loadMembers();
+            loadMembersAlphabetically();
+            loadNonContributors();
+            loadFinance();
+            loadLeaders();
+            loadEmergencyHistory();
+            loadAnnouncements();
+            loadComments();
+            checkEmergencyDeadlines();
+            loadSecretarySelects();
+            loadMeetingMinutes();
+            loadAttendance();
+            loadActionItems();
+            loadMemberStatuses();
+            loadEvents();
+            loadDocuments();
+            loadSecretaryDashboard();
+            startAnnouncementRotation();
+        });
+
+        function showModal(title, message, type = 'info') {
+            const modal = document.getElementById('modal');
+            const modalContent = modal.querySelector('.modal-content');
+            modal.querySelector('#modalTitle').textContent = title;
+            modal.querySelector('#modalMessage').innerHTML = message;
+            modalContent.className = `modal-content ${type}`;
+            modal.querySelector('#modalIcon').textContent = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+            document.querySelectorAll('.nav-menu li').forEach(li => li.classList.remove('active'));
+            document.getElementById(tabId).style.display = 'block';
+            document.querySelector(`.nav-menu li[onclick="openTab('${tabId}')"]`).classList.add('active');
+        }
+
+        function togglePaymentFields() {
+            const paymentType = document.getElementById('paymentType').value;
+            document.getElementById('feeMonthField').style.display = paymentType === 'Ada' ? 'block' : 'none';
+            document.getElementById('dateField').style.display = paymentType !== 'Ada' ? 'block' : 'none';
+        }
+
+        function saveRegistration(data) {
+            database.ref('members').orderByChild('phone').equalTo(data.phone).once('value')
+                .then(snap => {
+                    if (snap.exists()) {
+                        showModal('Hitilafu', 'Namba hii tayari imesajiliwa!', 'error');
+                    } else {
+                        database.ref('members').push(data)
+                            .then(() => {
+                                document.getElementById('registrationForm').reset();
+                                loadMembers();
+                                loadMembersAlphabetically();
+                                loadNonContributors();
+                                showModal('Mafanikio', 'Usajili umekamilika!', 'success');
+                            })
+                            .catch(err => {
+                                console.error('Save Registration Error:', err);
+                                showModal('Hitilafu', 'Tatizo la usajili: ' + err.message, 'error');
+                            });
+                    }
+                })
+                .catch(err => {
+                    console.error('Check Registration Error:', err);
+                    showModal('Hitilafu', 'Tatizo la kuangalia namba: ' + err.message, 'error');
+                });
+        }
+
+        function loadMembers() {
+            database.ref('members').once('value')
+                .then(snap => {
+                    const members = snap.val() || {};
+                    const selects = [
+                        document.getElementById('paymentMember'),
+                        document.getElementById('personalMember'),
+                        document.getElementById('printPersonalMember'),
+                        document.getElementById('emergencyMember'),
+                        document.getElementById('secretaryMember')
+                    ];
+                    selects.forEach(select => {
+                        select.innerHTML = '<option value="">Chagua Mwanachama</option>';
+                        Object.values(members).forEach(member => {
+                            const option = document.createElement('option');
+                            option.value = member.phone;
+                            option.textContent = member.fullName;
+                            select.appendChild(option);
+                        });
+                    });
+                })
+                .catch(err => console.error('Load Members Error:', err));
+        }
+
+        function loadSecretarySelects() {
+            database.ref('members').once('value')
+                .then(snap => {
+                    const members = snap.val() || {};
+                    const selects = [
+                        document.getElementById('attendanceMember'),
+                        document.getElementById('actionItemMember'),
+                        document.getElementById('statusMember'),
+                        document.getElementById('secretaryMember')
+                    ];
+                    selects.forEach(select => {
+                        select.innerHTML = '<option value="">Chagua Mwanachama</option>';
+                        Object.values(members).forEach(member => {
+                            const option = document.createElement('option');
+                            option.value = member.phone;
+                            option.textContent = member.fullName;
+                            select.appendChild(option);
+                        });
+                    });
+                })
+                .catch(err => console.error('Load Secretary Selects Error:', err));
+        }
+
+        function loadMembersAlphabetically() {
+            database.ref('members').once('value')
+                .then(snap => {
+                    const members = snap.val() || {};
+                    const sorted = Object.values(members).sort((a, b) => a.fullName.localeCompare(b.fullName));
+                    let list = '<h3>Wanachama</h3><ul>';
+                    sorted.forEach(member => {
+                        list += `<li>${member.fullName} - ${member.phone} (${member.address})</li>`;
+                    });
+                    list += '</ul>';
+                    document.getElementById('membersListAlphabet').innerHTML = list;
+                })
+                .catch(err => {
+                    console.error('Load Members Alphabetically Error:', err);
+                    document.getElementById('membersListAlphabet').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+                });
+        }
+
+        function savePayment(data) {
+            database.ref('payments').push(data)
+                .then(() => {
+                    document.getElementById('paymentForm').reset();
+                    togglePaymentFields();
+                    showModal('Mafanikio', 'Malipo yametumwa kwa uthibitisho!', 'success');
+                    if (isAdminLoggedIn) loadPendingPayments();
+                })
+                .catch(err => {
+                    console.error('Save Payment Error:', err);
+                    showModal('Hitilafu', 'Tatizo la kutuma malipo: ' + err.message, 'error');
+                });
+        }
+
+        function loadDebtors() {
+            const month = document.getElementById('debtMonth').value;
+            if (!month) return;
+            Promise.all([
+                database.ref('members').once('value'),
+                database.ref('payments').orderByChild('paymentMonth').equalTo(month).once('value')
+            ])
+                .then(([membersSnap, paymentsSnap]) => {
+                    const members = membersSnap.val() || {};
+                    const payments = paymentsSnap.val() || {};
+                    let list = '<h3>Hali ya Malipo - ' + month + '</h3><ul>';
+                    const paidPhones = new Set(Object.values(payments).filter(p => p.status === 'confirmed').map(p => p.paymentPhone));
+                    Object.values(members).forEach(member => {
+                        list += `<li>${member.fullName}: ${paidPhones.has(member.phone) ? 'Amelipa' : 'Hajalipa'}</li>`;
+                    });
+                    list += '</ul>';
+                    document.getElementById('debtorsList').innerHTML = list;
+                })
+                .catch(err => {
+                    console.error('Load Debtors Error:', err);
+                    document.getElementById('debtorsList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+                });
+        }
+
+        function loadContributions() {
+            const type = document.getElementById('contributionType').value;
+            if (!type) return;
+            Promise.all([
+                database.ref('members').once('value'),
+                database.ref('payments').orderByChild('paymentType').equalTo(type).once('value')
+            ])
+                .then(([membersSnap, paymentsSnap]) => {
+                    const members = membersSnap.val() || {};
+                    const payments = paymentsSnap.val() || {};
+                    let list = '<h3>Michango - ' + type + '</h3><ul>';
+                    const paidPhones = new Set(Object.values(payments).filter(p => p.status === 'confirmed').map(p => p.paymentPhone));
+                    Object.values(members).forEach(member => {
+                        if (paidPhones.has(member.phone)) {
+                            const payment = Object.values(payments).find(p => p.paymentPhone === member.phone);
+                            list += `<li>${member.fullName}: TSh ${payment.paymentAmount} (${payment.paymentMonth || payment.paymentDate})</li>`;
+                        } else {
+                            list += `<li>${member.fullName}: Hajatoa</li>`;
+                        }
+                    });
+                    list += '</ul>';
+                    document.getElementById('contributionsList').innerHTML = list;
+                })
+                .catch(err => {
+                    console.error('Load Contributions Error:', err);
+                    document.getElementById('contributionsList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+                });
+        }
+
+        function loadNonContributors() {
+               Promise.all([
+                database.ref('members').once('value'),
+                database.ref('payments').once('value')
+            ])
+                .then(([membersSnap, paymentsSnap]) => {
+                    const members = membersSnap.val() || {};
+                    const payments = paymentsSnap.val() || {};
+                    const paidPhones = new Set(Object.values(payments).filter(p => p.status === 'confirmed').map(p => p.paymentPhone));
+                    let list = '<h3>Wasiotoa Michango</h3><ul>';
+                    Object.values(members).forEach(member => {
+                        if (!paidPhones.has(member.phone)) {
+                            list += `<li>${member.fullName} - ${member.phone}</li>`;
+                        }
+                    });
+                    list += '</ul>';
+                    document.getElementById('nonContributorsList').innerHTML = list;
+                })
+                .catch(err => {
+                    console.error('Load Non-Contributors Error:', err);
+                    document.getElementById('nonContributorsList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+                });
+        }
+
+        function loadPersonalReport() {
+            const phone = document.getElementById('personalMember').value;
+            if (!phone) return;
+            Promise.all([
+                database.ref('members').orderByChild('phone').equalTo(phone).once('value'),
+                database.ref('payments').orderByChild('paymentPhone').equalTo(phone).once('value')
+            ])
+                .then(([memberSnap, paymentsSnap]) => {
+                    const member = Object.values(memberSnap.val() || {})[0];
+                    const payments = paymentsSnap.val() || {};
+                    let report = `<h3>${member.fullName}</h3><p>Namba: ${member.phone}</p><p>Mtaa: ${member.address}</p>`;
+                    const confirmedPayments = Object.values(payments).filter(p => p.status === 'confirmed');
+                    report += '<h4>Michango Iliyolipwa</h4><ul>';
+                    confirmedPayments.forEach(p => {
+                        report += `<li>${p.paymentType}: TSh ${p.paymentAmount} (${p.paymentMonth || p.paymentDate})</li>`;
+                    });
+                    report += '</ul>';
+
+                    const paidMonths = new Set(confirmedPayments.filter(p => p.paymentType === 'Ada').map(p => p.paymentMonth));
+                    const entryPayments = confirmedPayments.filter(p => p.paymentType === 'Hela ya Kiingilio');
+                    const totalEntryPaid = entryPayments.reduce((sum, p) => sum + Number(p.paymentAmount), 0);
+                    let debt = 0;
+                    report += '<h4>Michango Inayodaiwa</h4><ul>';
+                    for (let i = 0; i <= CURRENT_MONTH_INDEX; i++) {
+                        if (!paidMonths.has(MONTHS[i])) {
+                            report += `<li>Ada ya ${MONTHS[i]}: TSh ${MONTHLY_FEE}</li>`;
+                            debt += MONTHLY_FEE;
+                        }
+                    }
+                    if (totalEntryPaid < ENTRY_FEE) {
+                        const entryDebt = ENTRY_FEE - totalEntryPaid;
+                        report += `<li>Hela ya Kiingilio: TSh ${entryDebt}</li>`;
+                        debt += entryDebt;
+                    }
+                    report += '</ul>';
+                    report += `<p><strong>Jumla ya Madeni: TSh ${debt}</strong></p>`;
+                    document.getElementById('personalReport').innerHTML = report;
+                })
+                .catch(err => {
+                    console.error('Load Personal Report Error:', err);
+                    document.getElementById('personalReport').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+                });
+        }
+
+        function addIncome() {
+            const amount = document.getElementById('incomeAmount').value;
+            const desc = document.getElementById('incomeDesc').value;
+            if (!amount || !desc) return showModal('Hitilafu', 'Ingiza kiasi na maelezo ya mapato!', 'error');
+            const incomeData = {
+                amount: Number(amount),
+                description: desc,
+                timestamp: Date.now(),
+                type: 'income'
+            };
+            database.ref('finance').push(incomeData)
+                .then(() => {
+                    document.getElementById('incomeAmount').value = '';
+                    document.getElementById('incomeDesc').value = '';
+                    loadFinance();
+                    showModal('Mafanikio', 'Mapato yameongezwa!', 'success');
+                })
+                .catch(err => {
+                    console.error('Add Income Error:', err);
+                    showModal('Hitilafu', 'Tatizo la kuongeza mapato: ' + err.message, 'error');
+                });
+        }
+
+        function addExpense() {
+            const amount = document.getElementById('expenseAmount').value;
+            const desc = document.getElementById('expenseDesc').value;
+            if (!amount || !desc) return showModal('Hitilafu', 'Ingiza kiasi na maelezo ya matumizi!', 'error');
+            const expenseData = {
+                amount: Number(amount),
+                description: desc,
+                timestamp: Date.now(),
+                type: 'expense'
+            };
+            database.ref('finance').push(expenseData)
+                .then(() => {
+                    document.getElementById('expenseAmount').value = '';
+                    document.getElementById('expenseDesc').value = '';
+                    loadFinance();
+                    showModal('Mafanikio', 'Matumizi yameongezwa!', 'success');
+                })
+                .catch(err => {
+                    console.error('Add Expense Error:', err);
+                    showModal('Hitilafu', 'Tatizo la kuongeza matumizi: ' + err.message, 'error');
+                });
+        }
+
+        function loadFinance() {
+            Promise.all([
+                database.ref('payments').once('value'),
+                database.ref('finance').once('value')
+            ])
+                .then(([paymentsSnap, financeSnap]) => {
+                    const payments = paymentsSnap.val() || {};
+                    const financeData = financeSnap.val() || {};
+                    let totalIncome = 0, totalExpense = 0;
+
+                    Object.values(payments).forEach(payment => {
+                        if (payment.status === 'confirmed' && payment.paymentType !== 'Maafa na Starehe') {
+                            totalIncome += Number(payment.paymentAmount);
+                        }
+                    });
+
+                    let history = '<h3>Historia ya Fedha</h3><table class="table"><tr><th>Aina</th><th>Kiasi (TSh)</th><th>Maelezo</th><th>Tarehe</th></tr>';
+                    Object.entries(financeData).forEach(([id, item]) => {
+                        const date = new Date(item.timestamp).toLocaleString();
+                        if (item.type === 'income') totalIncome += item.amount;
+                        else totalExpense += item.amount;
+                        history += `<tr><td>${item.type === 'income' ? 'Mapato' : 'Matumizi'}</td><td>${item.amount}</td><td>${item.description}</td><td>${date}</td></tr>`;
+                    });
+                    history += '</table>';
+
+                    const summary = `<p><strong>Jumla ya Mapato: TSh ${totalIncome}</strong></p><p><strong>Jumla ya Matumizi: TSh ${totalExpense}</strong></p><p><strong>Salio: TSh ${totalIncome - totalExpense}</strong></p>`;
+                    document.getElementById('financeSummary').innerHTML = summary;
+                    document.getElementById('financeHistory').innerHTML = history;
+                    document.getElementById('balanceAmount').textContent = totalIncome - totalExpense;
+                })
+                .catch(err => {
+                    console.error('Load Finance Error:', err);
+                    document.getElementById('financeSummary').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+                });
+        }
+
+        function generateFinanceReport(period) {
+            Promise.all([
+                database.ref('payments').once('value'),
+                database.ref('finance').once('value')
+            ])
+                .then(([paymentsSnap, financeSnap]) => {
+                    const payments = paymentsSnap.val() || {};
+                    const financeData = financeSnap.val() || {};
+                    const now = new Date();
+                    let totalIncome = 0, totalExpense = 0;
+                    let filteredData = Object.values(financeData);
+
+                    if (period === 'week') {
+                        const oneWeekAgo = now.getTime() - 7 * 24 * 60 * 60 * 1000;
+                        filteredData = filteredData.filter(item => item.timestamp >= oneWeekAgo);
+                    } else if (period === 'month') {
+                        const oneMonthAgo = now.getTime() - 30 * 24 * 60 * 60 * 1000;
+                        filteredData = filteredData.filter(item => item.timestamp >= oneMonthAgo);
+                    } else if (period === 'year') {
+                        const oneYearAgo = now.getTime() - 365 * 24 * 60 * 60 * 1000;
+                        filteredData = filteredData.filter(item => item.timestamp >= oneYearAgo);
+                    }
+
+                    const doc = new jsPDF();
+                    doc.setFontSize(16);
+                    doc.text('Ripoti ya Fedha - Kamhanga Advanced Group', 10, 10);
+                    doc.setFontSize(12);
+                    doc.text(`Awamu: ${period.charAt(0).toUpperCase() + period.slice(1)}`, 10, 20);
+                    doc.text(`Tarehe: ${now.toLocaleDateString()}`, 10, 30);
+
+                    Object.values(payments).forEach(payment => {
+                        if (payment.status === 'confirmed' && payment.paymentType !== 'Maafa na Starehe') {
+                            const paymentDate = new Date(payment.timestamp);
+                            if (
+                                (period === 'week' && paymentDate >= now.getTime() - 7 * 24 * 60 * 60 * 1000) ||
+                                (period === 'month' && paymentDate >= now.getTime() - 30 * 24 * 60 * 60 * 1000) ||
+                                (period === 'year' && paymentDate >= now.getTime() - 365 * 24 * 60 * 60 * 1000) ||
+                                period === 'all'
+                            ) {
+                                totalIncome += Number(payment.paymentAmount);
+                            }
+                        }
+                    });
+
+                    let y = 50;
+                    doc.text('Aina | Kiasi (TSh) | Maelezo | Tarehe', 10, 40);
+                    filteredData.forEach(item => {
+                        const date = new Date(item.timestamp).toLocaleString();
+                        if (item.type === 'income') totalIncome += item.amount;
+                        else totalExpense += item.amount;
+                        doc.text(`${item.type === 'income' ? 'Mapato' : 'Matumizi'} | ${item.amount} | ${item.description} | ${date}`, 10, y);
+                        y += 10;
+                        if (y > 270) {
+                            doc.addPage();
+                            y = 10;
+                        }
+                    });
+
+                    doc.text(`Jumla ya Mapato: TSh ${totalIncome}`, 10, y);
+                    doc.text(`Jumla ya Matumizi: TSh ${totalExpense}`, 10, y + 10);
+                    doc.text(`Salio: TSh ${totalIncome - totalExpense}`, 10, y + 20);
+                    doc.save(`Ripoti_Fedha_${period}_${now.toISOString().split('T')[0]}.pdf`);
+                })
+                .catch(err => {
+                    console.error('Generate Finance Report Error:', err);
+                    showModal('Hitilafu', 'Tatizo la kuunda ripoti: ' + err.message, 'error');
+                });
+        }
+
+        function printPersonalReport() {
+    const phone = document.getElementById('printPersonalMember').value;
+    if (!phone) return showModal('Hitilafu', 'Chagua mwanachama kwanza!', 'error');
+    Promise.all([
+        database.ref('members').orderByChild('phone').equalTo(phone).once('value'),
+        database.ref('payments').orderByChild('paymentPhone').equalTo(phone).once('value')
+    ])
+        .then(([memberSnap, paymentsSnap]) => {
+            const member = Object.values(memberSnap.val() || {})[0];
+            const payments = paymentsSnap.val() || {};
+            const confirmedPayments = Object.values(payments).filter(p => p.status === 'confirmed');
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text(`Taarifa Binafsi - ${member.fullName}`, 10, 10);
+            doc.setFontSize(12);
+            doc.text(`Namba ya Simu: ${member.phone}`, 10, 20);
+            doc.text(`Mtaa: ${member.address}`, 10, 30);
+            let y = 40;
+
+            doc.text('Michango Iliyolipwa:', 10, y);
+            y += 10;
+            confirmedPayments.forEach(p => {
+                doc.text(`${p.paymentType}: TSh ${p.paymentAmount} (${p.paymentMonth || p.paymentDate})`, 10, y);
+                y += 10;
+                if (y > 270) {
+                    doc.addPage();
+                    y = 10;
+                }
+            });
+
+            const paidMonths = new Set(confirmedPayments.filter(p => p.paymentType === 'Ada').map(p => p.paymentMonth));
+            const entryPayments = confirmedPayments.filter(p => p.paymentType === 'Hela ya Kiingilio');
+            const totalEntryPaid = entryPayments.reduce((sum, p) => sum + Number(p.paymentAmount), 0);
+            let debt = 0;
+            y += 10;
+            doc.text('Michango Inayodaiwa:', 10, y);
+            y += 10;
+            for (let i = 0; i <= CURRENT_MONTH_INDEX; i++) {
+                if (!paidMonths.has(MONTHS[i])) {
+                    doc.text(`Ada ya ${MONTHS[i]}: TSh ${MONTHLY_FEE}`, 10, y);
+                    debt += MONTHLY_FEE;
+                    y += 10;
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 10;
+                    }
+                }
+            }
+            if (totalEntryPaid < ENTRY_FEE) {
+                const entryDebt = ENTRY_FEE - totalEntryPaid;
+                doc.text(`Hela ya Kiingilio: TSh ${entryDebt}`, 10, y);
+                debt += entryDebt;
+                y += 10;
+            }
+            doc.text(`Jumla ya Madeni: TSh ${debt}`, 10, y + 10);
+            doc.save(`Taarifa_Binafsi_${member.fullName}_${new Date().toISOString().split('T')[0]}.pdf`);
+        })
+        .catch(err => {
+            console.error('Print Personal Report Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuchapisha taarifa binafsi: ' + err.message, 'error');
+        });
+}
+
+function printDebtors() {
+    const month = document.getElementById('debtMonth').value;
+    if (!month) return showModal('Hitilafu', 'Chagua mwezi kwanza!', 'error');
+    Promise.all([
+        database.ref('members').once('value'),
+        database.ref('payments').orderByChild('paymentMonth').equalTo(month).once('value')
+    ])
+        .then(([membersSnap, paymentsSnap]) => {
+            const members = membersSnap.val() || {};
+            const payments = paymentsSnap.val() || {};
+            const paidPhones = new Set(Object.values(payments).filter(p => p.status === 'confirmed').map(p => p.paymentPhone));
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text(`Hali ya Malipo - ${month}`, 10, 10);
+            doc.setFontSize(12);
+            doc.text('Waliolipa:', 10, 30);
+            let y = 40;
+            Object.values(members).forEach(m => {
+                if (paidPhones.has(m.phone)) {
+                    doc.text(`${m.fullName} - Amelipa`, 10, y);
+                    y += 10;
+                }
+            });
+            y += 10;
+            doc.text('Waliobaki:', 10, y);
+            y += 10;
+            Object.values(members).forEach(m => {
+                if (!paidPhones.has(m.phone)) {
+                    doc.text(`${m.fullName} - Hajalipa`, 10, y);
+                    y += 10;
+                }
+            });
+            doc.save(`Hali_ya_Malipo_${month}_${new Date().toISOString().split('T')[0]}.pdf`);
+        })
+        .catch(err => {
+            console.error('Print Debtors Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuchapisha hali ya malipo: ' + err.message, 'error');
+        });
+}
+
+function printContributions() {
+    const type = document.getElementById('contributionType').value;
+    if (!type) return showModal('Hitilafu', 'Chagua aina ya mchango kwanza!', 'error');
+    Promise.all([
+        database.ref('members').once('value'),
+        database.ref('payments').orderByChild('paymentType').equalTo(type).once('value')
+    ])
+        .then(([membersSnap, paymentsSnap]) => {
+            const members = membersSnap.val() || {};
+            const payments = paymentsSnap.val() || {};
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text(`Michango - ${type}`, 10, 10);
+            doc.setFontSize(12);
+            let y = 30;
+            Object.values(members).forEach(member => {
+                const memberPayments = Object.values(payments).filter(p => p.paymentPhone === member.phone && p.status === 'confirmed');
+                if (memberPayments.length > 0) {
+                    doc.text(`${member.fullName}:`, 10, y);
+                    y += 10;
+                    memberPayments.forEach(p => {
+                        doc.text(`- TSh ${p.paymentAmount} (${p.paymentMonth || p.paymentDate})`, 20, y);
+                        y += 10;
+                    });
+                } else {
+                    doc.text(`${member.fullName}: Hajatoa`, 10, y);
+                    y += 10;
+                }
+                if (y > 270) {
+                    doc.addPage();
+                    y = 10;
+                }
+            });
+            doc.save(`Michango_${type}_${new Date().toISOString().split('T')[0]}.pdf`);
+        })
+        .catch(err => {
+            console.error('Print Contributions Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuchapisha michango: ' + err.message, 'error');
+        });
+}
+
+function printFinance() {
+    Promise.all([
+        database.ref('payments').once('value'),
+        database.ref('finance').once('value')
+    ])
+        .then(([paymentsSnap, financeSnap]) => {
+            const payments = paymentsSnap.val() || {};
+            const financeData = financeSnap.val() || {};
+            let totalIncome = 0, totalExpense = 0;
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text('Ripoti ya Fedha - Kamhanga Advanced Group', 10, 10);
+            doc.setFontSize(12);
+            doc.text(`Tarehe: ${new Date().toLocaleDateString()}`, 10, 20);
+            doc.text('Aina | Kiasi (TSh) | Maelezo | Tarehe', 10, 40);
+            let y = 50;
+
+            Object.values(payments).forEach(payment => {
+                if (payment.status === 'confirmed' && payment.paymentType !== 'Maafa na Starehe') {
+                    totalIncome += Number(payment.paymentAmount);
+                    const date = new Date(payment.timestamp).toLocaleString();
+                    doc.text(`Mapato | ${payment.paymentAmount} | ${payment.paymentType} | ${date}`, 10, y);
+                    y += 10;
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 10;
+                    }
+                }
+            });
+
+            Object.values(financeData).forEach(item => {
+                const date = new Date(item.timestamp).toLocaleString();
+                if (item.type === 'income') totalIncome += item.amount;
+                else totalExpense += item.amount;
+                doc.text(`${item.type === 'income' ? 'Mapato' : 'Matumizi'} | ${item.amount} | ${item.description} | ${date}`, 10, y);
+                y += 10;
+                if (y > 270) {
+                    doc.addPage();
+                    y = 10;
+                }
+            });
+
+            doc.text(`Jumla ya Mapato: TSh ${totalIncome}`, 10, y);
+            doc.text(`Jumla ya Matumizi: TSh ${totalExpense}`, 10, y + 10);
+            doc.text(`Salio: TSh ${totalIncome - totalExpense}`, 10, y + 20);
+            doc.save(`Ripoti_Fedha_${new Date().toISOString().split('T')[0]}.pdf`);
+        })
+        .catch(err => {
+            console.error('Print Finance Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuchapisha ripoti ya fedha: ' + err.message, 'error');
+        });
+}
+
+function printNonContributors() {
+    Promise.all([
+        database.ref('members').once('value'),
+        database.ref('payments').once('value')
+    ])
+        .then(([membersSnap, paymentsSnap]) => {
+            const members = membersSnap.val() || {};
+            const payments = paymentsSnap.val() || {};
+            const paidPhones = new Set(Object.values(payments).filter(p => p.status === 'confirmed').map(p => p.paymentPhone));
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text('Wanachama Wasiotoa Michango', 10, 10);
+            doc.setFontSize(12);
+            let y = 30;
+            Object.values(members).forEach(member => {
+                if (!paidPhones.has(member.phone)) {
+                    doc.text(`${member.fullName} - ${member.phone}`, 10, y);
+                    y += 10;
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 10;
+                    }
+                }
+            });
+            doc.save(`Wasiotoa_Michango_${new Date().toISOString().split('T')[0]}.pdf`);
+        })
+        .catch(err => {
+            console.error('Print Non-Contributors Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuchapisha wasiotoa michango: ' + err.message, 'error');
+        });
+}
+
+function loginAdmin() {
+    const password = document.getElementById('adminPassword').value;
+    if (password === loginPassword || password === CONSTANT_PASSWORD || (customAdminPassword && password === customAdminPassword)) {
+        isAdminLoggedIn = true;
+        document.getElementById('adminLoginForm').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        document.getElementById('adminPassword').value = '';
+        loadPendingPayments();
+        showModal('Mafanikio', 'Umefanikiwa kuingia!', 'success');
+    } else {
+        showModal('Hitilafu', 'Neno la siri sio sahihi!', 'error');
+    }
+}
+
+function logoutAdmin() {
+    isAdminLoggedIn = false;
+    document.getElementById('adminLoginForm').style.display = 'block';
+    document.getElementById('adminPanel').style.display = 'none';
+    showModal('Mafanikio', 'Umetoka kwenye paneli ya viongozi!', 'success');
+}
+
+function loadPendingPayments() {
+    database.ref('payments').orderByChild('status').equalTo('pending').once('value')
+        .then(snap => {
+            const payments = snap.val() || {};
+            let table = '<table class="table"><tr><th>Jina</th><th>Aina</th><th>Kiasi</th><th>Mwezi/Tarehe</th><th>Chaguzi</th></tr>';
+            Promise.all(
+                Object.entries(payments).map(([id, payment]) =>
+                    database.ref('members').orderByChild('phone').equalTo(payment.paymentPhone).once('value')
+                        .then(memberSnap => {
+                            const member = Object.values(memberSnap.val() || {})[0];
+                            return {
+                                id,
+                                payment,
+                                memberName: member ? member.fullName : 'Unknown'
+                            };
+                        })
+                )
+            ).then(results => {
+                results.forEach(({id, payment, memberName}) => {
+                    table += `<tr>
+                        <td>${memberName}</td>
+                        <td>${payment.paymentType}</td>
+                        <td>TSh ${payment.paymentAmount}</td>
+                        <td>${payment.paymentMonth || payment.paymentDate}</td>
+                        <td>
+                            <button class="btn btn-success" onclick="confirmPayment('${id}')">Thibitisha</button>
+                            <button class="btn btn-danger" onclick="rejectPayment('${id}')">Kataa</button>
+                        </td>
+                    </tr>`;
+                });
+                table += '</table>';
+                document.getElementById('pendingPaymentsTable').innerHTML = table;
+            });
+        })
+        .catch(err => {
+            console.error('Load Pending Payments Error:', err);
+            document.getElementById('pendingPaymentsTable').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function confirmPayment(paymentId) {
+    database.ref('payments').child(paymentId).update({ status: 'confirmed' })
+        .then(() => {
+            loadPendingPayments();
+            loadFinance();
+            showModal('Mafanikio', 'Malipo yamethibitishwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Confirm Payment Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuthibitisha malipo: ' + err.message, 'error');
+        });
+}
+
+function rejectPayment(paymentId) {
+    database.ref('payments').child(paymentId).update({ status: 'rejected' })
+        .then(() => {
+            loadPendingPayments();
+            showModal('Mafanikio', 'Malipo yamekataliwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Reject Payment Error:', err);
+            showModal('Hitilafu', 'Tatizo la kukataa malipo: ' + err.message, 'error');
+        });
+}
+
+function postAnnouncement() {
+    const text = document.getElementById('announcementTextInput').value;
+    if (!text) return showModal('Hitilafu', 'Ingiza tangazo kwanza!', 'error');
+    const announcementData = {
+        text,
+        timestamp: Date.now(),
+        type: 'regular'
+    };
+    database.ref('announcements').push(announcementData)
+        .then(() => {
+            document.getElementById('announcementTextInput').value = '';
+            loadAnnouncements();
+            showModal('Mafanikio', 'Tangazo limechapishwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Post Announcement Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuchapisha tangazo: ' + err.message, 'error');
+        });
+}
+
+function loadAnnouncements() {
+    database.ref('announcements').once('value')
+        .then(snap => {
+            const announcements = snap.val() || {};
+            let list = '<h3>Tangazo Zilizopita</h3><ul>';
+            Object.values(announcements).forEach(ann => {
+                const date = new Date(ann.timestamp).toLocaleString();
+                list += `<li>[${date}] ${ann.text} (${ann.type})</li>`;
+            });
+            list += '</ul>';
+            document.getElementById('announcementsList').innerHTML = list;
+        })
+        .catch(err => {
+            console.error('Load Announcements Error:', err);
+            document.getElementById('announcementsList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function startAnnouncementRotation() {
+    let regularAnnouncements = [];
+    let emergencyAnnouncements = [];
+    let constitutionAnnouncements = constitutionArticles.map(article => ({
+        text: article,
+        type: 'constitution',
+        timestamp: Date.now()
+    }));
+    let shownConstitutionArticles = [];
+
+    database.ref('announcements').once('value')
+        .then(snap => {
+            const announcements = snap.val() || {};
+            Object.values(announcements).forEach(ann => {
+                if (ann.type === 'regular') regularAnnouncements.push(ann);
+                else if (ann.type === 'emergency') emergencyAnnouncements.push(ann);
+            });
+
+            function displayNextAnnouncement() {
+                const announcementDisplay = document.getElementById('announcementDisplay');
+                const announcementText = document.getElementById('announcementText');
+                let announcement;
+
+                const types = ['regular', 'emergency', 'constitution'];
+                const type = types[Math.floor(Math.random() * types.length)];
+
+                if (type === 'regular' && regularAnnouncements.length > 0) {
+                    announcement = regularAnnouncements[Math.floor(Math.random() * regularAnnouncements.length)];
+                } else if (type === 'emergency' && emergencyAnnouncements.length > 0) {
+                    announcement = emergencyAnnouncements[Math.floor(Math.random() * emergencyAnnouncements.length)];
+                } else {
+                    const availableArticles = constitutionAnnouncements.filter(a => !shownConstitutionArticles.includes(a.text));
+                    if (availableArticles.length === 0) {
+                        shownConstitutionArticles = [];
+                        announcement = constitutionAnnouncements[Math.floor(Math.random() * constitutionAnnouncements.length)];
+                    } else {
+                        announcement = availableArticles[Math.floor(Math.random() * availableArticles.length)];
+                        shownConstitutionArticles.push(announcement.text);
+                    }
+                }
+
+                announcementText.textContent = announcement.text;
+                announcementDisplay.className = `announcement ${announcement.type}`;
+                setTimeout(displayNextAnnouncement, 30000);
+            }
+
+            if (regularAnnouncements.length === 0 && emergencyAnnouncements.length === 0 && constitutionAnnouncements.length === 0) {
+                document.getElementById('announcementText').textContent = 'Hakuna tangazo kwa sasa.';
+                document.getElementById('announcementDisplay').className = 'announcement regular';
+            } else {
+                displayNextAnnouncement();
+            }
+        })
+        .catch(err => {
+            console.error('Start Announcement Rotation Error:', err);
+            document.getElementById('announcementText').textContent = 'Hitilafu ya kutangaza.';
+        });
+}
+
+function addLeader() {
+    const name = document.getElementById('leaderName').value;
+    const position = document.getElementById('leaderPosition').value;
+    if (!name || !position) return showModal('Hitilafu', 'Ingiza jina na cheo!', 'error');
+    const leaderData = { name, position };
+    database.ref('leaders').push(leaderData)
+        .then(() => {
+            document.getElementById('leaderName').value = '';
+            document.getElementById('leaderPosition').value = '';
+            loadLeaders();
+            showModal('Mafanikio', 'Kiongozi ameongezwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Add Leader Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuongeza kiongozi: ' + err.message, 'error');
+        });
+}
+
+function loadLeaders() {
+    database.ref('leaders').once('value')
+        .then(snap => {
+            const leaders = snap.val() || {};
+            let list = '<h3>Viongozi</h3>';
+            Object.values(leaders).forEach(leader => {
+                list += `<div class="leader-item">
+                    <span class="leader-icon">👑</span>
+                    <div>
+                        <span class="leader-name">${leader.name}</span><br>
+                        <span class="leader-position">${leader.position}</span>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('leadersList').innerHTML = list;
+        })
+        .catch(err => {
+            console.error('Load Leaders Error:', err);
+            document.getElementById('leadersList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function toggleNonContributors() {
+    adminSettings.isNonContributorsVisible = !adminSettings.isNonContributorsVisible;
+    saveAdminSettings();
+    toggleNonContributorsDisplay();
+    showModal('Mafanikio', `Wasiotoa michango ${adminSettings.isNonContributorsVisible ? 'wanaonekana' : 'wamefichwa'}!`, 'success');
+}
+
+function toggleNonContributorsDisplay() {
+    document.getElementById('nonContributorsTab').style.display = adminSettings.isNonContributorsVisible ? 'block' : 'none';
+}
+
+function toggleEmergencyForm() {
+    adminSettings.isEmergencyFormVisible = !adminSettings.isEmergencyFormVisible;
+    saveAdminSettings();
+    toggleEmergencyFormDisplay();
+    showModal('Mafanikio', `Form ya michango ya dharura ${adminSettings.isEmergencyFormVisible ? 'inaonekana' : 'imefichwa'}!`, 'success');
+}
+
+function toggleEmergencyFormDisplay() {
+    document.getElementById('emergencyFormSection').style.display = adminSettings.isEmergencyFormVisible ? 'block' : 'none';
+}
+
+function toggleSecretaryTab() {
+    adminSettings.isSecretaryTabVisible = !adminSettings.isSecretaryTabVisible;
+    saveAdminSettings();
+    toggleSecretaryTabDisplay();
+    showModal('Mafanikio', `Kipengele cha katibu ${adminSettings.isSecretaryTabVisible ? 'kinaonekana' : 'kimefichwa'}!`, 'success');
+}
+
+function toggleSecretaryTabDisplay() {
+    document.getElementById('secretaryTab').style.display = adminSettings.isSecretaryTabVisible ? 'block' : 'none';
+}
+
+function toggleBalanceDisplay() {
+    adminSettings.isBalanceVisible = !adminSettings.isBalanceVisible;
+    saveAdminSettings();
+    toggleBalanceDisplayUI();
+    showModal('Mafanikio', `Salio la mfumo ${adminSettings.isBalanceVisible ? 'linaonekana' : 'limefichwa'}!`, 'success');
+}
+
+function toggleBalanceDisplayUI() {
+    document.getElementById('balanceDisplay').style.display = adminSettings.isBalanceVisible ? 'block' : 'none';
+}
+
+function setEmergencyDeadline() {
+    const name = document.getElementById('emergencyName').value;
+    const start = document.getElementById('emergencyStart').value;
+    const deadline = document.getElementById('emergencyDeadline').value;
+    if (!name || !start || !deadline) return showModal('Hitilafu', 'Ingiza jina, tarehe ya kuanza, na tarehe ya mwisho!', 'error');
+    const emergencyData = {
+        name,
+        start: new Date(start).getTime(),
+        deadline: new Date(deadline).getTime(),
+        timestamp: Date.now()
+    };
+    database.ref('emergencies').push(emergencyData)
+        .then(() => {
+            document.getElementById('emergencyName').value = '';
+            document.getElementById('emergencyStart').value = '';
+            document.getElementById('emergencyDeadline').value = '';
+            checkEmergencyDeadlines();
+            const announcementData = {
+                text: `Mchango wa dharura: ${name} umeanza ${new Date(start).toLocaleString()} na unamalizika ${new Date(deadline).toLocaleString()}`,
+                type: 'emergency',
+                timestamp: Date.now()
+            };
+            database.ref('announcements').push(announcementData)
+                .then(() => showModal('Mafanikio', 'Muda wa mchango wa dharura umewekwa!', 'success'))
+                .catch(err => console.error('Post Emergency Announcement Error:', err));
+        })
+        .catch(err => {
+            console.error('Set Emergency Deadline Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuweka muda: ' + err.message, 'error');
+        });
+}
+
+function extendEmergencyDeadline() {
+    const name = document.getElementById('emergencyName').value;
+    const newDeadline = document.getElementById('emergencyDeadline').value;
+    if (!name || !newDeadline) return showModal('Hitilafu', 'Ingiza jina la mchango na tarehe mpya ya mwisho!', 'error');
+    database.ref('emergencies').orderByChild('name').equalTo(name).once('value')
+        .then(snap => {
+            const emergencies = snap.val() || {};
+            if (Object.keys(emergencies).length === 0) return showModal('Hitilafu', 'Mchango wa dharura haujapatikana!', 'error');
+            const emergencyId = Object.keys(emergencies)[0];
+            database.ref('emergencies').child(emergencyId).update({ deadline: new Date(newDeadline).getTime() })
+                .then(() => {
+                    document.getElementById('emergencyName').value = '';
+                    document.getElementById('emergencyDeadline').value = '';
+                    checkEmergencyDeadlines();
+                    const announcementData = {
+                        text: `Muda wa mchango wa dharura: ${name} umeongezwa hadi ${new Date(newDeadline).toLocaleString()}`,
+                        type: 'emergency',
+                        timestamp: Date.now()
+                    };
+                    database.ref('announcements').push(announcementData)
+                        .then(() => showModal('Mafanikio', 'Muda wa mchango umeongezwa!', 'success'))
+                        .catch(err => console.error('Post Extended Deadline Announcement Error:', err));
+                })
+                .catch(err => {
+                    console.error('Extend Emergency Deadline Error:', err);
+                    showModal('Hitilafu', 'Tatizo la kuongeza muda: ' + err.message, 'error');
+                });
+        })
+        .catch(err => {
+            console.error('Find Emergency Error:', err);
+            showModal('Hitilafu', 'Tatizo la kupata mchango: ' + err.message, 'error');
+        });
+}
+
+function deleteEmergencyHistory() {
+    database.ref('emergencyContributions').remove()
+        .then(() => {
+            loadEmergencyHistory();
+            showModal('Mafanikio', 'Historia ya michango ya dharura imefutwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Delete Emergency History Error:', err);
+            showModal('Hitilafu', 'Tatizo la kufuta historia: ' + err.message, 'error');
+        });
+}
+
+function changeLoginCredentials() {
+    const newUsername = document.getElementById('newLoginUsername').value;
+    const newPassword = document.getElementById('newLoginPassword').value;
+    if (!newUsername || !newPassword) return showModal('Hitilafu', 'Ingiza jina la mtumiaji na neno la siri!', 'error');
+    loginUsername = newUsername;
+    loginPassword = newPassword;
+    customAdminPassword = newPassword;
+    document.getElementById('newLoginUsername').value = '';
+    document.getElementById('newLoginPassword').value = '';
+    showModal('Mafanikio', 'Jina la mtumiaji na neno la siri vimebadilishwa!', 'success');
+}
+
+function saveEmergencyContribution(data) {
+    database.ref('emergencyContributions').push(data)
+        .then(() => {
+            document.getElementById('emergencyForm').reset();
+            loadEmergencyHistory();
+            showModal('Mafanikio', 'Mchango wa dharura umetumwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Save Emergency Contribution Error:', err);
+            showModal('Hitilafu', 'Tatizo la kutuma mchango: ' + err.message, 'error');
+        });
+}
+
+function loadEmergencyHistory() {
+    Promise.all([
+        database.ref('emergencyContributions').once('value'),
+        database.ref('members').once('value')
+    ])
+        .then(([contributionsSnap, membersSnap]) => {
+            const contributions = contributionsSnap.val() || {};
+            const members = membersSnap.val() || {};
+            let history = '<h4>Historia ya Michango ya Dharura</h4><ul>';
+            Object.values(contributions).forEach(contribution => {
+                const member = Object.values(members).find(m => m.phone === contribution.memberPhone);
+                const date = new Date(contribution.timestamp).toLocaleString();
+                history += `<li>${member ? member.fullName : 'Unknown'} - TSh ${contribution.amount} (${contribution.purpose}) - ${date}</li>`;
+            });
+            history += '</ul>';
+            document.getElementById('emergencyHistory').innerHTML = history;
+        })
+        .catch(err => {
+            console.error('Load Emergency History Error:', err);
+            document.getElementById('emergencyHistory').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function checkEmergencyDeadlines() {
+    database.ref('emergencies').once('value')
+        .then(snap => {
+            const emergencies = snap.val() || {};
+            const now = Date.now();
+            Object.entries(emergencies).forEach(([id, emergency]) => {
+                if (emergency.deadline < now) {
+                    database.ref('emergencies').child(id).remove()
+                        .catch(err => console.error('Remove Expired Emergency Error:', err));
+                }
+            });
+        })
+        .catch(err => {
+            console.error('Check Emergency Deadlines Error:', err);
+        });
+}
+
+function saveComment(data) {
+    database.ref('comments').push(data)
+        .then(() => {
+            document.getElementById('commentForm').reset();
+            loadComments();
+            showModal('Mafanikio', 'Maoni yametumwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Save Comment Error:', err);
+            showModal('Hitilafu', 'Tatizo la kutuma maoni: ' + err.message, 'error');
+        });
+}
+
+function loadComments() {
+    database.ref('comments').once('value')
+        .then(snap => {
+            const comments = snap.val() || {};
+            let list = '<h3>Maoni</h3><ul>';
+            Object.values(comments).forEach(comment => {
+                const date = new Date(comment.timestamp).toLocaleString();
+                list += `<li><strong>${comment.name}</strong>: ${comment.text} (${date})</li>`;
+            });
+            list += '</ul>';
+            document.getElementById('commentsList').innerHTML = list;
+        })
+        .catch(err => {
+            console.error('Load Comments Error:', err);
+            document.getElementById('commentsList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function saveMeetingMinutes() {
+    const minutes = document.getElementById('meetingMinutes').value;
+    if (!minutes) return showModal('Hitilafu', 'Ingiza kumbukumbu za kikao!', 'error');
+    const minutesData = {
+        text: minutes,
+        timestamp: Date.now()
+    };
+    database.ref('meetingMinutes').push(minutesData)
+        .then(() => {
+            document.getElementById('meetingMinutes').value = '';
+            loadMeetingMinutes();
+            showModal('Mafanikio', 'Kumbukumbu zimehifadhiwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Save Meeting Minutes Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuhifadhi kumbukumbu: ' + err.message, 'error');
+        });
+}
+
+function loadMeetingMinutes() {
+    database.ref('meetingMinutes').once('value')
+        .then(snap => {
+            const minutes = snap.val() || {};
+            let list = '<h3>Kumbukumbu za Mikutano</h3><ul>';
+            Object.values(minutes).forEach(minute => {
+                const date = new Date(minute.timestamp).toLocaleString();
+                list += `<li>[${date}] ${minute.text}</li>`;
+            });
+            list += '</ul>';
+            document.getElementById('meetingMinutesList').innerHTML = list;
+        })
+        .catch(err => {
+            console.error('Load Meeting Minutes Error:', err);
+            document.getElementById('meetingMinutesList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function generateMeetingReport() {
+    database.ref('meetingMinutes').once('value')
+        .then(snap => {
+            const minutes = snap.val() || {};
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text('Ripoti ya Mikutano - Kamhanga Advanced Group', 10, 10);
+            doc.setFontSize(12);
+            let y = 30;
+            Object.values(minutes).forEach(minute => {
+                const date = new Date(minute.timestamp).toLocaleString();
+                doc.text(`[${date}] ${minute.text}`, 10, y);
+                y += 10;
+                if (y > 270) {
+                    doc.addPage();
+                    y = 10;
+                }
+            });
+            doc.save(`Ripoti_ya_Mikutano_${new Date().toISOString().split('T')[0]}.pdf`);
+        })
+        .catch(err => {
+            console.error('Generate Meeting Report Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuunda ripoti ya mikutano: ' + err.message, 'error');
+        });
+}
+
+function loadSecretaryMemberDetails() {
+    const phone = document.getElementById('secretaryMember').value;
+    if (!phone) return;
+    Promise.all([
+        database.ref('members').orderByChild('phone').equalTo(phone).once('value'),
+        database.ref('payments').orderByChild('paymentPhone').equalTo(phone).once('value'),
+        database.ref('emergencyContributions').orderByChild('memberPhone').equalTo(phone).once('value')
+    ])
+        .then(([memberSnap, paymentsSnap, emergencySnap]) => {
+            const member = Object.values(memberSnap.val() || {})[0];
+            const payments = paymentsSnap.val() || {};
+            const emergencies = emergencySnap.val() || {};
+            let details = `<h3>${member.fullName}</h3>
+                <p>Namba: ${member.phone}</p>
+                <p>Mtaa: ${member.address}</p>
+                <h4>Michango ya Kawaida</h4><ul>`;
+            Object.values(payments).filter(p => p.status === 'confirmed').forEach(p => {
+                details += `<li>${p.paymentType}: TSh ${p.paymentAmount} (${p.paymentMonth || p.paymentDate})</li>`;
+            });
+            details += '</ul><h4>Michango ya Dharura</h4><ul>';
+            Object.values(emergencies).forEach(e => {
+                details += `<li>TSh ${e.amount} - ${e.purpose} (${new Date(e.timestamp).toLocaleString()})</li>`;
+            });
+            details += '</ul>';
+            document.getElementById('secretaryMemberDetails').innerHTML = details;
+        })
+        .catch(err => {
+            console.error('Load Secretary Member Details Error:', err);
+            document.getElementById('secretaryMemberDetails').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function saveAttendance() {
+    const selectedMembers = Array.from(document.getElementById('attendanceMember').selectedOptions).map(option => option.value);
+    const date = document.getElementById('attendanceDate').value;
+    if (!selectedMembers.length || !date) return showModal('Hitilafu', 'Chagua wanachama na tarehe!', 'error');
+    const attendanceData = {
+        members: selectedMembers,
+        date,
+        timestamp: Date.now()
+    };
+    database.ref('attendance').push(attendanceData)
+        .then(() => {
+            document.getElementById('attendanceMember').selectedIndex = -1;
+            document.getElementById('attendanceDate').value = '';
+            loadAttendance();
+            showModal('Mafanikio', 'Hudhurio limehifadhiwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Save Attendance Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuhifadhi hudhurio: ' + err.message, 'error');
+        });
+}
+
+function loadAttendance() {
+    Promise.all([
+        database.ref('attendance').once('value'),
+        database.ref('members').once('value')
+    ])
+        .then(([attendanceSnap, membersSnap]) => {
+            const attendance = attendanceSnap.val() || {};
+            const members = membersSnap.val() || {};
+            let list = '<h4>Historia ya Hudhurio</h4><ul>';
+            Object.values(attendance).forEach(record => {
+                const memberNames = record.members.map(phone => {
+                    const member = Object.values(members).find(m => m.phone === phone);
+                    return member ? member.fullName : 'Unknown';
+                }).join(', ');
+                list += `<li>${record.date}: ${memberNames}</li>`;
+            });
+            list += '</ul>';
+            document.getElementById('attendanceList').innerHTML = list;
+        })
+        .catch(err => {
+            console.error('Load Attendance Error:', err);
+            document.getElementById('attendanceList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function assignActionItem() {
+    const memberPhone = document.getElementById('actionItemMember').value;
+    const description = document.getElementById('actionItemDesc').value;
+    const deadline = document.getElementById('actionItemDeadline').value;
+    if (!memberPhone || !description || !deadline) return showModal('Hitilafu', 'Ingiza mwanachama, maelezo, na tarehe ya mwisho!', 'error');
+    const actionItemData = {
+        memberPhone,
+        description,
+        deadline,
+        timestamp: Date.now(),
+        status: 'pending'
+    };
+    database.ref('actionItems').push(actionItemData)
+        .then(() => {
+            document.getElementById('actionItemMember').value = '';
+            document.getElementById('actionItemDesc').value = '';
+            document.getElementById('actionItemDeadline').value = '';
+            loadActionItems();
+            showModal('Mafanikio', 'Jukumu limepewa!', 'success');
+        })
+        .catch(err => {
+            console.error('Assign Action Item Error:', err);
+            showModal('Hitilafu', 'Tatizo la kupeana jukumu: ' + err.message, 'error');
+        });
+}
+
+function loadActionItems() {
+    Promise.all([
+        database.ref('actionItems').once('value'),
+        database.ref('members').once('value')
+    ])
+        .then(([itemsSnap, membersSnap]) => {
+            const items = itemsSnap.val() || {};
+            const members = membersSnap.val() || {};
+            let list = '<h4>Majukumu Yanayosubiri</h4><ul>';
+            Object.values(items).forEach(item => {
+                const member = Object.values(members).find(m => m.phone === item.memberPhone);
+                list += `<li>${member ? member.fullName : 'Unknown'}: ${item.description} (Mwisho: ${item.deadline}, Hali: ${item.status})</li>`;
+            });
+            list += '</ul>';
+            document.getElementById('actionItemsList').innerHTML = list;
+        })
+        .catch(err => {
+            console.error('Load Action Items Error:', err);
+            document.getElementById('actionItemsList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function updateMemberStatus() {
+    const memberPhone = document.getElementById('statusMember').value;
+    const status = document.getElementById('memberStatus').value;
+    const notes = document.getElementById('statusNotes').value;
+    if (!memberPhone || !status) return showModal('Hitilafu', 'Chagua mwanachama na hali!', 'error');
+    const statusData = {
+        status,
+        notes: notes || 'Hakuna maelezo',
+        timestamp: Date.now()
+    };
+    database.ref('memberStatuses').child(memberPhone).set(statusData)
+        .then(() => {
+            document.getElementById('statusMember').value = '';
+            document.getElementById('memberStatus').value = 'active';
+            document.getElementById('statusNotes').value = '';
+            loadMemberStatuses();
+            showModal('Mafanikio', 'Hali ya mwanachama imesasishwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Update Member Status Error:', err);
+            showModal('Hitilafu', 'Tatizo la kusasisha hali: ' + err.message, 'error');
+        });
+}
+
+function loadMemberStatuses() {
+    Promise.all([
+        database.ref('memberStatuses').once('value'),
+        database.ref('members').once('value')
+    ])
+        .then(([statusesSnap, membersSnap]) => {
+            const statuses = statusesSnap.val() || {};
+            const members = membersSnap.val() || {};
+            let list = '<h4>Hali za Wanachama</h4><ul>';
+            Object.entries(statuses).forEach(([phone, status]) => {
+                const member = Object.values(members).find(m => m.phone === phone);
+                list += `<li>${member ? member.fullName : 'Unknown'}: ${status.status} (${status.notes})</li>`;
+            });
+            list += '</ul>';
+            document.getElementById('statusList').innerHTML = list;
+        })
+        .catch(err => {
+            console.error('Load Member Statuses Error:', err);
+            document.getElementById('statusList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function scheduleEvent() {
+    const name = document.getElementById('eventName').value;
+    const date = document.getElementById('eventDate').value;
+    const location = document.getElementById('eventLocation').value;
+    if (!name || !date || !location) return showModal('Hitilafu', 'Ingiza jina, tarehe, na mahali pa tukio!', 'error');
+    const eventData = {
+        name,
+        date,
+        location,
+        timestamp: Date.now()
+    };
+    database.ref('events').push(eventData)
+        .then(() => {
+            document.getElementById('eventName').value = '';
+            document.getElementById('eventDate').value = '';
+            document.getElementById('eventLocation').value = '';
+            loadEvents();
+            showModal('Mafanikio', 'Tukio limeratibiwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Schedule Event Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuratibu tukio: ' + err.message, 'error');
+        });
+}
+
+function loadEvents() {
+    database.ref('events').once('value')
+        .then(snap => {
+            const events = snap.val() || {};
+            let list = '<h4>Matukio Yanayokuja</h4><ul>';
+            Object.values(events).forEach(event => {
+                list += `<li>${event.name} - ${event.date} (${event.location})</li>`;
+            });
+            list += '</ul>';
+            document.getElementById('eventsList').innerHTML = list;
+        })
+        .catch(err => {
+            console.error('Load Events Error:', err);
+            document.getElementById('eventsList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function uploadDocument() {
+    const name = document.getElementById('documentName').value;
+    const file = document.getElementById('documentFile').files[0];
+    if (!name || !file) return showModal('Hitilafu', 'Ingiza jina la hati na uchague faili!', 'error');
+    const documentData = {
+        name,
+        fileName: file.name,
+        timestamp: Date.now()
+    };
+    database.ref('documents').push(documentData)
+        .then(() => {
+            document.getElementById('documentName').value = '';
+            document.getElementById('documentFile').value = '';
+            loadDocuments();
+            showModal('Mafanikio', 'Hati imehifadhiwa!', 'success');
+        })
+        .catch(err => {
+            console.error('Upload Document Error:', err);
+            showModal('Hitilafu', 'Tatizo la kuhifadhi hati: ' + err.message, 'error');
+        });
+}
+
+function loadDocuments() {
+    database.ref('documents').once('value')
+        .then(snap => {
+            const documents = snap.val() || {};
+            let list = '<h4>Hati Zilizohifadhiwa</h4><ul>';
+            Object.values(documents).forEach(doc => {
+                list += `<li>${doc.name} (${doc.fileName}) - ${new Date(doc.timestamp).toLocaleString()}</li>`;
+            });
+            list += '</ul>';
+            document.getElementById('documentsList').innerHTML = list;
+        })
+        .catch(err => {
+            console.error('Load Documents Error:', err);
+            document.getElementById('documentsList').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+function loadSecretaryDashboard() {
+    Promise.all([
+        database.ref('actionItems').once('value'),
+        database.ref('events').once('value'),
+        database.ref('attendance').once('value')
+    ])
+        .then(([itemsSnap, eventsSnap, attendanceSnap]) => {
+            const items = itemsSnap.val() || {};
+            const events = eventsSnap.val() || {};
+            const attendance = attendanceSnap.val() || {};
+            const pendingItems = Object.values(items).filter(item => item.status === 'pending').length;
+            const upcomingEvents = Object.values(events).filter(event => new Date(event.date) > new Date()).length;
+            const recentAttendance = Object.values(attendance).slice(-1)[0];
+            let summary = `
+                <h4>Muhtasari wa Katibu</h4>
+                <p>Majukumu Yanayosubiri: ${pendingItems}</p>
+                <p>Matukio Yanayokuja: ${upcomingEvents}</p>
+                <p>Hudhurio la Hivi Karibuni: ${recentAttendance ? recentAttendance.date : 'Hakuna'}</p>
+            `;
+            document.getElementById('secretaryDashboard').innerHTML = summary;
+        })
+        .catch(err => {
+            console.error('Load Secretary Dashboard Error:', err);
+            document.getElementById('secretaryDashboard').innerHTML = '<p>Hakuna data au hitilafu imetokea.</p>';
+        });
+}
+
+document.getElementById('registrationForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const data = {
+        fullName: document.getElementById('fullName').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value
+    };
+    saveRegistration(data);
+});
+
+document.getElementById('paymentForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const paymentType = document.getElementById('paymentType').value;
+    const data = {
+        paymentPhone: document.getElementById('paymentMember').value,
+        paymentType,
+        paymentAmount: document.getElementById('paymentAmount').value,
+        status: 'pending',
+        timestamp: Date.now()
+    };
+    if (paymentType === 'Ada') {
+        data.paymentMonth = document.getElementById('feeMonth').value;
+    } else {
+        data.paymentDate = document.getElementById('paymentDate').value;
+    }
+    savePayment(data);
+});
+
+document.getElementById('commentForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const data = {
+        name: document.getElementById('commentName').value,
+        text: document.getElementById('commentText').value,
+        timestamp: Date.now()
+    };
+    saveComment(data);
+});
+
+document.getElementById('emergencyForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const data = {
+        memberPhone: document.getElementById('emergencyMember').value,
+        amount: document.getElementById('emergencyAmount').value,
+        purpose: document.getElementById('emergencyPurpose').value,
+        timestamp: Date.now()
+    };
+    saveEmergencyContribution(data);
+});
+    </script>
+</body>
+</html>
+
