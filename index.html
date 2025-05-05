@@ -598,7 +598,7 @@
         <div class="header">
             <h1>KAMHANGA ADVANCED GROUP 2014-2018</h1>
             <div class="welcome">Karibu Sana! Pamoja Tunaweza Zaidi.</div>
-            <div><span class="status-btn">Online</span> <span class="month-btn">Sasa tupo April</span></div>
+            <div><span class="status-btn">Online</span> <span class="month-btn">Sasa tupo wezi wa tano</span></div>
         </div>
 
         <div id="announcementDisplay" class="announcement">
@@ -622,7 +622,7 @@
                 <li onclick="openTab('constitution')"><span class="icon">📚</span>KATIBA NA SHERIA ZA KUNDI</li>
                 <li onclick="openTab('membersListAlpha')"><span class="icon">📋</span>Majina ya wanachama wote</li>
                 <li onclick="openTab('print')"><span class="icon">🖨️</span>Chapisha</li>
-                <li onclick="openTab('comments')"><span class="icon">💬</span>Maoni</li>
+                <li onclick="openTab('comments')"><span class="icon">💬</span>Toa Maoni yako hapa</li>
                 <li onclick="openTab('leaders')"><span class="icon">👑</span>Majina ya Viongozi</li>
                 <li onclick="openTab('emergency')"><span class="icon">🚨</span>MICHANGO YA DHARURA 🚨</li>
                 <li id="secretaryTab" onclick="openTab('secretary')"><span class="icon">📆</span>Kumbukumbu za vikao</li>
@@ -714,13 +714,21 @@
             <div class="card">
                 <h2>Hali ya Malipo</h2>
                 <div class="form-group">
-                    <select id="debtMonth" class="modern-select" onchange="loadDebtors()">
-                        <option value="">Chagua Mwezi</option>
-                        <option value="January">Januari</option>
-                        <option value="February">Februari</option>
-                        <option value="March">Machi</option>
-                        <option value="April">Aprili</option>
-                    </select>
+    <select id="debtMonth" class="modern-select" onchange="loadDebtors()">
+        <option value="">Chagua Mwezi</option>
+        <option value="January">Januari</option>
+        <option value="February">Februari</option>
+        <option value="March">Machi</option>
+        <option value="April">Aprili</option>
+        <option value="May">Mei</option>
+        <option value="June">Juni</option>
+        <option value="July">Julai</option>
+        <option value="August">Agosti</option>
+        <option value="September">Septemba</option>
+        <option value="October">Oktoba</option>
+        <option value="November">Novemba</option>
+        <option value="December">Desemba</option>
+    </select>
                 </div>
                 <div id="debtorsList"></div>
             </div>
@@ -1244,7 +1252,7 @@
         </div>
 
         <div class="footer">
-            <span class="powered-by">POWERED BY MALOSHA</span>
+            <span class="powered-by">POWERED BY DAVID MALOSHA</span>
             <div id="dailyUsers">Waliotembelea mfumo leo: <span id="userCount">0</span></div>
         </div>
     </div>
